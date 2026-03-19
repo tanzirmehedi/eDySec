@@ -126,4 +126,4 @@ print("Built with CUDA:", tf.test.is_built_with_cuda())
 print("LD_LIBRARY_PATH:", os.environ.get("LD_LIBRARY_PATH"))
 print("Available GPUs:", tf.config.list_physical_devices('GPU'))
 
-echo "Setup complete!"
+Setup complete!
