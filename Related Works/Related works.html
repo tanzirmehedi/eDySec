@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>eDySec Related Works</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #0f172a;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.8rem;
+        }
+
+        .header-meta {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #3b82f6;
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 1rem;
+        }
+
+        .header-meta p {
+            margin: 0.35rem 0;
+            color: #334155;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .header-meta strong {
+            color: #0f172a;
+        }
+
+        .sub {
+            color: #334155;
+            margin-top: 0.5rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            font-weight: 400;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .search-box input {
+            border: none;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            width: 240px;
+            outline: none;
+            background: transparent;
+        }
+
+        .search-box span {
+            color: #64748b;
+        }
+
+        .filter-badge {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #e2e8f0;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+
+        .badge.active {
+            background: #1e4a76;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .badge:hover {
+            background: #cbd5e1;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 1rem;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            min-width: 1100px;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 1rem 0.8rem;
+            font-weight: 600;
+            color: #0f172a;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            background-color: #f8fafc;
+        }
+
+        td {
+            padding: 0.9rem 0.8rem;
+            border-bottom: 1px solid #eef2f6;
+            vertical-align: top;
+            line-height: 1.4;
+        }
+
+        tr:hover td {
+            background-color: #fefce8;
+        }
+
+        .paper-title {
+            font-weight: 600;
+            color: #0c4a6e;
+            font-size: 0.85rem;
+        }
+
+        .venue {
+            font-size: 0.7rem;
+            color: #475569;
+            margin-top: 0.2rem;
+        }
+
+        .ecosystem {
+            display: inline-block;
+            background: #dbeafe;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.7rem;
+            color: #1e40af;
+        }
+
+        .perf-highlight {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 0.1rem 0.3rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .tag {
+            background: #e6f7ec;
+            color: #166534;
+            padding: 0.15rem 0.4rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tag-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .tag-blue {
+            background: #e0f2fe;
+            color: #0c4a6e;
+        }
+
+        .feature-text {
+            max-width: 280px;
+            font-size: 0.75rem;
+        }
+
+        .note {
+            font-size: 0.7rem;
+            color: #4b5563;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: #5b6e8c;
+            line-height: 1.6;
+            padding-top: 1rem;
+            border-top: 1px solid #dbe2ea;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📄 Related Studies on Software Supply Chain Security · Malicious Package Detection</h1>
+
+        <div class="header-meta">
+            <p><strong>Developed By:</strong> eDySec Research Team</p>
+            <p><strong>Title:</strong> eDySec: A Deep Learning-based Explainable Dynamic Analysis for Detecting Malicious Packages in PyPI Ecosystem</p>
+        </div>
+
+        <div class="sub">15 research papers — cross-ecosystem insights (PyPI, npm), static/dynamic/hybrid ML, stability, explainability & kernel-level analysis</div>
+    </div>
+
+    <div class="controls">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Filter by title, author, ecosystem...">
+        </div>
+        <div class="filter-badge" id="ecosystemFilter">
+            <span class="badge active" data-eco="all">All</span>
+            <span class="badge" data-eco="PyPI">🐍 PyPI</span>
+            <span class="badge" data-eco="npm">📦 npm</span>
+            <span class="badge" data-eco="Multi">🌐 Multi (PyPI+npm)</span>
+            <span class="badge" data-eco=".exe">⚙️ .exe + PyPI</span>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="papersTable">
+            <thead>
+                <tr>
+                    <th>Paper & Venue</th>
+                    <th>Ecosystem</th>
+                    <th>Analysis Type</th>
+                    <th>Model / Approach</th>
+                    <th>Performance (Key metrics)</th>
+                    <th>Feature / Behavior Analysis</th>
+                    <th>Explainability</th>
+                    <th>Model Stability</th>
+                    <th>Kernel-Level</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- dynamic rows from JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <div>© 2026 eDySec Research. All Rights Reserved.</div>
+    </footer>
+</div>
+
+<script>
+    const papers = [
+        {
+            title: "On the Feasibility of Cross-Language Detection of Malicious Packages in npm and PyPI",
+            venue: "ACSAC '23 (ACM)",
+            authors: "Ladisa et al.",
+            ecosystem: "Multi",
+            analysis: "Static (lexical + structural features, no execution)",
+            model: "ML (XGBoost, RF, DT) – best: XGBoost",
+            performance: "npm: F1 84.4% (mono), PyPI: F1 68-91%; 58 new malicious (38 npm,20 PyPI)",
+            features: "141 language-agnostic features: entropy (GL₄), install hooks, URL/IP, file extensions, symbol ratios",
+            explainability: "No LIME/SHAP; tree models provide inherent interpretability",
+            stability: "Limited (10x5-fold CV, no longitudinal/adversarial)",
+            kernel: "No (user-space source code only)"
+        },
+        {
+            title: "PyRadar: Automatically Retrieving and Validating Source Code Repository Info for PyPI",
+            venue: "FSE 2024 (ACM)",
+            authors: "Gao et al.",
+            ecosystem: "PyPI",
+            analysis: "Static + Metadata + heuristic (provenance)",
+            model: "ML (Random Forest, AUC 0.995) + rule-based retrievers",
+            performance: "Validator: Prec 0.913, Rec 0.989; repo retrieval accuracy 0.970; 72% metadata coverage",
+            features: "Phantom file analysis (Git SHA-1), name similarity (Levenshtein), tag alignment, maintainer stats",
+            explainability: "Permutation importance only (no SHAP/LIME)",
+            stability: "Indirect (cross-dataset eval, manual top-100 validation)",
+            kernel: "No (file/metadata/Git objects)"
+        },
+        {
+            title: "PyGuardEX: Automated Detection of Malicious Packages in PyPI and .exe files",
+            venue: "preprint / short paper (2023?)",
+            authors: "Gandhi et al.",
+            ecosystem: ".exe",
+            analysis: "Static (entropy, imports, file counts) – no dynamic",
+            model: "ML (Random Forest, Logistic Regression)",
+            performance: "PyPI acc 97%, .exe acc 98.21% (Prec 0.99/0.96)",
+            features: "average_entropy, python_file_count, package_size, contains_ip/domain, base64, import subprocess/os",
+            explainability: "No (feature importance from RF)",
+            stability: "No (basic train/test only)",
+            kernel: "No (PE static features)"
+        },
+        {
+            title: "Malicious Package Detection using Metadata Information (MeMPtec)",
+            venue: "WWW '24",
+            authors: "Halder et al.",
+            ecosystem: "npm",
+            analysis: "Metadata-based static",
+            model: "ML/DL (SVM, GLM, GBM, DRF, DL) – best DRF/DL",
+            performance: "F1 0.998 (balanced), reduces false positives by 93-97%",
+            features: "ETM vs DTM features (monotonicity, restricted control); temporal signals, stars, forks, PRs, package age",
+            explainability: "Yes (SHAP for feature importance)",
+            stability: "No formal stability; robustness against manipulation analyzed",
+            kernel: "No (metadata only)"
+        },
+        {
+            title: "OSCAR: Robust Detection of OSS Supply Chain Poisoning Attacks",
+            venue: "ASE '24",
+            authors: "Zheng et al.",
+            ecosystem: "Multi",
+            analysis: "Dynamic (sandbox + fuzzing + AOP + Falco)",
+            model: "Rule-based (no ML) – blacklist/whitelist",
+            performance: "npm F1 0.95, PyPI F1 0.91; 10k+ malicious found in industry",
+            features: "API hook pointcuts (network, file, process) + system call monitoring (Falco)",
+            explainability: "Rule-based (explicit match logs) – no SHAP/LIME",
+            stability: "Industrial 18-month deployment; rule updates but no formal stability metrics",
+            kernel: "Partial (Falco syscall monitoring, eBPF) – but not deep kernel rootkit analysis"
+        },
+        {
+            title: "EA4mp: Integrating Deep Code Behaviors with Metadata Features",
+            venue: "ASE '24",
+            authors: "Sun et al.",
+            ecosystem: "PyPI",
+            analysis: "Static (code behavior sequences + metadata)",
+            model: "Ensemble (AdaBoost): fine-tuned BERT + NB",
+            performance: "F1 97.6%, Prec 99.2%, Rec 96.0%; found 119 new malicious",
+            features: "CG+CFG behavior sequences → BERT; 9 metadata features (package size, name similarity, author, description)",
+            explainability: "No (ablation + t-SNE only)",
+            stability: "10-fold CV, 3-week deployment, no long-term drift analysis",
+            kernel: "No"
+        },
+        {
+            title: "DONAPI: Malicious NPM Packages Detector using Behavior Sequence Knowledge Mapping",
+            venue: "arXiv:2403.08334",
+            authors: "Huang et al.",
+            ecosystem: "npm",
+            analysis: "Hybrid (static + dynamic API monitoring)",
+            model: "ML (Random Forest primary) + rule/knowledge base",
+            performance: "Acc 0.97, Prec 0.90, Rec 0.92, F1 0.93; 325 malicious found",
+            features: "12 behavior features (exfiltration, env query, download+exec), 132 runtime APIs monitored",
+            explainability: "No LIME/SHAP but behavior knowledge mapping",
+            stability: "Deployment stability observations, no formal statistical stability",
+            kernel: "No (user-space Node.js API instrumentation)"
+        },
+        {
+            title: "A Machine Learning-Based Approach For Detecting Malicious PyPI Packages",
+            venue: "preprint (arXiv:2412.05259)",
+            authors: "Samaana et al.",
+            ecosystem: "PyPI",
+            analysis: "Static (metadata, code, license, setup.cfg)",
+            model: "ML (Stacking: RF+SVM+MLP+DT+NB)",
+            performance: "F1 94.2% (train), test F1 90%; 0 false positives on typical packages",
+            features: "8 features: homepage validity, author email, suspicious URL, long strings, license mismatch, minimal setup config",
+            explainability: "No (permutation importance only)",
+            stability: "10-fold CV repeated 10 times, no concept drift analysis",
+            kernel: "No"
+        },
+        {
+            title: "Cerebro: Killing Two Birds with One Stone (PyPI+npm)",
+            venue: "arXiv:2309.02637",
+            authors: "Zhang et al.",
+            ecosystem: "Multi",
+            analysis: "Static (behavior sequence – call graph)",
+            model: "DL (fine-tuned RoBERTa/BERT)",
+            performance: "PyPI: 96.0% Prec / 91.7% Rec; npm: 98.5% Prec / 92.9% Rec",
+            features: "16 language-independent static features → malicious behavior sequence (execution phase order)",
+            explainability: "No LIME/SHAP (sequence-level interpretability)",
+            stability: "Robustness under scarce data, no repeated-run stability",
+            kernel: "No"
+        },
+        {
+            title: "MalGuard: Real-Time, Accurate Malicious Package Detection in PyPI",
+            venue: "USENIX Security '25",
+            authors: "Gao et al.",
+            ecosystem: "PyPI",
+            analysis: "Static (API call graph + centrality + LLM refinement)",
+            model: "ML (Random Forest best) + LIME explanations",
+            performance: "Prec 99.6%, Rec 98.4%, F1 99.0%; 113 new malicious",
+            features: "Graph centrality (closeness, degree, Katz) on API calls; GPT-3.5 filtering",
+            explainability: "Yes (LIME)",
+            stability: "Temporal robustness evaluated (train older / test newer), adversarial robustness",
+            kernel: "No (static API graphs)"
+        },
+        {
+            title: "PypiGuard: Meta-learning with static-dynamic feature fusion",
+            venue: "JISA 2025",
+            authors: "Iqbal et al.",
+            ecosystem: "PyPI",
+            analysis: "Hybrid (static metadata + sandboxed API call behaviors)",
+            model: "Stacking meta-model (XGBoost) with RF, GB, ANN, etc.",
+            performance: "Acc 98.43%, Prec 99.06%, Rec 96.60%, FPR 0.64%",
+            features: "Label encoding + Z-score + 8 API categories (network, filesystem, crypto, execution)",
+            explainability: "No (future SHAP mentioned)",
+            stability: "Explicit stability analysis (Std Dev ±0.06% acc, precision/recall ranges)",
+            kernel: "No (API-level only)"
+        },
+        {
+            title: "PyPIMalDet: Code + Metadata features (Neural Networks)",
+            venue: "Neural Networks 2026",
+            authors: "Yan & Zhao",
+            ecosystem: "PyPI",
+            analysis: "Static (code features + metadata, DAE representation)",
+            model: "Adaptive stacking ensemble + denoising autoencoder",
+            performance: "Prec 98.29%, Rec 97.54%, F1 97.91%; ~1.6s/pkg",
+            features: "Code behavior + metadata; DAE for robust code vectors; attention fusion",
+            explainability: "No LIME/SHAP",
+            stability: "Ablation + sensitivity analysis, no formal stability",
+            kernel: "No"
+        },
+        {
+            title: "CLAMPD-Net: Cross-language multimodal detection (PyPI+npm)",
+            venue: "IST 2026",
+            authors: "Iqbal et al.",
+            ecosystem: "Multi",
+            analysis: "Static multimodal (metadata + dependency graph HAN + API semantics)",
+            model: "DL (attention-based CNN-BiGRU-transformer)",
+            performance: "Acc 97.23%, Prec 98.24%, Rec 96.80%, F1 97.51%",
+            features: "9 metadata + 128 HAN graph + 1768 API semantic features → multimodal fusion",
+            explainability: "Yes (SHAP KernelExplainer, 68% API features contribution)",
+            stability: "Training stability/convergence reported; no multi-run variance stats",
+            kernel: "No"
+        },
+        {
+            title: "PyGUARD: Knowledge-Mining Framework (LLM + pattern mining)",
+            venue: "USENIX/ICSE style (2025?)",
+            authors: "Guo et al.",
+            ecosystem: "Multi",
+            analysis: "Static + knowledge-driven (RAG + LLM, no execution)",
+            model: "Pattern mining (PrefixSpan) + RAG LLM (GPT-4.1)",
+            performance: "99.5% acc, 2 false positives; 219 new PyPI malicious, cross-npm 98% acc",
+            features: "Behavioral action sequences (327 categories) → deterministic/justifiable patterns (304 final)",
+            explainability: "Natural language reasoning (RAG explanations) – no SHAP/LIME",
+            stability: "Limited; evaluated on obfuscated/latest datasets, no repeated-run metrics",
+            kernel: "No"
+        },
+        {
+            title: "DySec: ML-Based Dynamic Analysis (eBPF) for PyPI",
+            venue: "IEEE TIFS 2026",
+            authors: "Mehedi et al.",
+            ecosystem: "PyPI",
+            analysis: "Dynamic (install-time eBPF kernel & user probes)",
+            model: "ML (Random Forest primary)",
+            performance: "95.99% accuracy, RF: Prec 0.97, F1 0.97, FPR 2.63%",
+            features: "62 candidate dynamic features → 36 final (filetop, opensnoop, TCP, syscall, pattern traces)",
+            explainability: "No LIME/SHAP; feature importance selection",
+            stability: "Real-world robustness, but no formal stability study",
+            kernel: "Yes (eBPF kernel-level tracing + syscalls)"
+        }
+    ];
+
+    function renderTable(filterEco = "all", searchTerm = "") {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+
+        const filtered = papers.filter(p => {
+            const ecoMatch = filterEco === "all" || p.ecosystem === filterEco;
+            const searchLower = searchTerm.toLowerCase();
+            const textMatch = searchTerm === "" ||
+                p.title.toLowerCase().includes(searchLower) ||
+                p.authors.toLowerCase().includes(searchLower) ||
+                p.venue.toLowerCase().includes(searchLower) ||
+                p.model.toLowerCase().includes(searchLower);
+            return ecoMatch && textMatch;
+        });
+
+        if (filtered.length === 0) {
+            const row = tbody.insertRow();
+            const cell = row.insertCell(0);
+            cell.colSpan = 9;
+            cell.textContent = "📭 No matching papers. Try adjusting filters.";
+            cell.style.textAlign = "center";
+            cell.style.padding = "2rem";
+            return;
+        }
+
+        filtered.forEach(p => {
+            const row = tbody.insertRow();
+
+            let paperHtml = `<div class="paper-title">${p.title}</div><div class="venue">${p.authors} — ${p.venue}</div>`;
+            row.insertCell(0).innerHTML = paperHtml;
+
+            let ecoHtml = `<span class="ecosystem">${p.ecosystem}</span>`;
+            row.insertCell(1).innerHTML = ecoHtml;
+
+            row.insertCell(2).innerHTML = p.analysis;
+            row.insertCell(3).innerHTML = p.model;
+            row.insertCell(4).innerHTML = `<span class="perf-highlight">${p.performance}</span>`;
+            row.insertCell(5).innerHTML = `<div class="feature-text">${p.features}</div>`;
+
+            row.insertCell(6).innerHTML = p.explainability;
+            row.insertCell(7).innerHTML = p.stability;
+            row.insertCell(8).innerHTML = p.kernel;
+        });
+    }
+
+    let currentEco = "all";
+    let currentSearch = "";
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+        currentSearch = e.target.value;
+        renderTable(currentEco, currentSearch);
+    });
+
+    const ecoBadges = document.querySelectorAll("#ecosystemFilter .badge");
+    ecoBadges.forEach(badge => {
+        badge.addEventListener("click", () => {
+            ecoBadges.forEach(b => b.classList.remove("active"));
+            badge.classList.add("active");
+            currentEco = badge.getAttribute("data-eco");
+            renderTable(currentEco, currentSearch);
+        });
+    });
+
+    renderTable("all", "");
+</script>
+</body>
+</html>
