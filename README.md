@@ -123,7 +123,7 @@ transformers==4.49.0
 
 If a `requirements.txt` file is available, install dependencies with:
 
-```python
+```bash
 pip install -r requirements.txt
 ```
 
@@ -143,7 +143,7 @@ jupyter notebook
 
 The project expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
 
-```text
+```bash
 Phase (i) Data Preparation/QUT-DV25 Dataset/
 ```
 
@@ -176,7 +176,7 @@ This phase applies the feature selection methods used in the study.
 
 Go to:
 
-```text
+```bash
 Phase (ii) Feature Selection/Feature Selection Methods/
 ```
 
@@ -192,7 +192,7 @@ For each method, run the notebook corresponding to the required trace category.
 
 Example:
 
-```text
+```bash
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Filetop_ANOVA.ipynb
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Install_ANOVA.ipynb
@@ -202,7 +202,7 @@ Run the corresponding notebooks in the same way for CORR, FLAML, PSO, and WOA.
 
 The generated and consolidated feature selection outputs are available under:
 
-```text
+```bash
 Phase (ii) Feature Selection/Feature Selection Result/
 ```
 
@@ -212,13 +212,13 @@ This phase trains and evaluates the deep learning models using the selected feat
 
 Go to:
 
-```text
+```bash
 Phase (iii) DL Model Selection & Evaluation/
 ```
 
 Choose the desired feature selection method directory, such as:
 
-```text
+```bash
 ANOVA/
 FLAML/
 ```
@@ -227,7 +227,7 @@ Then open the required trace-category folder and run the corresponding notebook.
 
 Example:
 
-```text
+```bash
 Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_BERT.ipynb
 Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_DistilGPT2.ipynb
 Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_LSTM.ipynb
@@ -249,13 +249,13 @@ This phase generates SHAP- and LIME-based explanations for the best-performing c
 
 Run:
 
-```text
+```bash
 Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
 ```
 
 This notebook produces outputs in:
 
-```text
+```bash
 Phase (iv) Stability & Explainability/Explainability Analysis/LIME Outputs/
 Phase (iv) Stability & Explainability/Explainability Analysis/SHAP Outputs/
 ```
@@ -274,13 +274,13 @@ This phase performs comparative stability analysis across models and feature sel
 
 Run:
 
-```text
+```bash
 Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
 ```
 
 This notebook generates outputs in:
 
-```text
+```bash
 Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis Outputs/
 ```
 
