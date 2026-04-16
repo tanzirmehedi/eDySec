@@ -20,9 +20,10 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.7910/DVN/LBMXJY.svg)](https://doi.org/10.7910/DVN/LBMXJY)
 
-## Project Structure
 
-```text
+## Repository Structure
+
+```bash
 eDySec/
 ├── Phase (i) Data Preparation/
 │   ├── QUT-DV25 Dataset/
@@ -74,176 +75,38 @@ eDySec/
 └── README.md
 ```
 
-## Main Components
+## Prerequisites
 
-### Phase (i) Data Preparation
+Before running the project, ensure that the following requirements are satisfied.
 
-This phase contains the **QUT-DV25** dataset organization, dataset overview notebook, trace source visualization, and t-SNE analysis for dynamic, metadata, and static perspectives.
+### 1. Operating System
 
-### Phase (ii) Feature Selection
+This project is primarily designed for **Linux-based environments**, as the dynamic trace collection and behavioral analysis pipeline are built around Linux-oriented runtime monitoring.
 
-This phase contains five feature selection methods:
-
-* **ANOVA**
-* **CORR**
-* **FLAML**
-* **PSO**
-* **WOA**
-
-It also includes consolidated feature selection result files for each trace category.
-
-### Phase (iii) DL Model Selection & Evaluation
-
-This phase contains model training and evaluation notebooks for different feature selection methods and trace categories. The generated outputs include:
-
-* confusion matrices
-* ROC curves
-* learning curves
-* evaluation summaries
-* training logs
-
-### Phase (iv) Stability & Explainability
-
-This phase contains:
-
-* **SHAP outputs** for global and local explanation
-* **LIME outputs** for dashboard and instance-level explanation
-* **stability analysis outputs** including ranking, statistical comparisons, and critical difference analysis
-
-## Running Instructions
-
-This repository is primarily organized as a **notebook-based research workflow**. The recommended execution order is shown below.
-
-### 1. Data preparation
-
-Open and run:
-
-```text
-Phase (i) Data Preparation/Dataset Overview.ipynb
-Phase (i) Data Preparation/t-SNE Implementation.ipynb
-```
-
-This phase prepares the dataset understanding and visualization for the QUT-DV25 traces.
-
-### 2. Feature selection
-
-Go to:
-
-```text
-Phase (ii) Feature Selection/Feature Selection Methods/
-```
-
-Then run the notebook for the required method and trace type.
-
-Example:
-
-```text
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Filetop_ANOVA.ipynb
-```
-
-Repeat similarly for:
-
-* CORR
-* FLAML
-* PSO
-* WOA
-
-The selected-feature summaries are stored in:
-
-```text
-Phase (ii) Feature Selection/Feature Selection Result/
-```
-
-### 3. Deep learning model selection and evaluation
-
-Go to:
-
-```text
-Phase (iii) DL Model Selection & Evaluation/
-```
-
-Choose a feature selection method folder such as:
-
-```text
-ANOVA/
-FLAML/
-```
-
-Then open the target trace-category folder and run the corresponding notebook.
-
-Example:
-
-```text
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_BERT.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_LSTM.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_RNN.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_Transformer.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_DistilGPT2.ipynb
-```
-
-Each notebook generates outputs inside its corresponding evaluation output directory, including:
-
-* `confusion_matrix_*.png`
-* `roc_curve_*.png`
-* `learning_curves.png`
-* `evaluation_summary.csv`
-* `training_log.xlsx`
-
-### 4. Explainability analysis
-
-Open and run:
-
-```text
-Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
-```
-
-This generates:
-
-* **LIME Outputs**
-* **SHAP Outputs**
-
-Example outputs include:
-
-* SHAP global summary plots
-* SHAP waterfall plots
-* LIME dashboards
-* local explanations for benign and malicious samples
-
-### 5. Stability analysis
-
-Open and run:
-
-```text
-Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
-```
-
-This generates:
-
-* mean-std-rank summaries
-* model performance heatmaps
-* critical difference diagram (Friedman + Nemenyi)
-* p-value matrix
-* top-performing model-feature combinations
-* compact summary figures
-
-## Recommended Workflow
-
-Run the project in this order:
-
-1. **Dataset overview and visualization**
-2. **Feature selection**
-3. **DL model training and evaluation**
-4. **Explainability analysis**
-5. **Stability analysis**
-
-## Environment
+### 2. Python Version
 
 Use **Python 3.10**.
 
-Typical packages used in this project include:
+### 3. Recommended Environment Setup
 
-```txt
+Create and activate a virtual environment before installing dependencies.
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+For Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+### 4. Required Python Packages
+
+Typical packages used throughout the project include:
+
+```bash
 pandas==1.5.3
 scikit-learn==1.2.2
 numpy==1.23.5
@@ -258,39 +121,215 @@ notebook==6.5.6
 transformers==4.49.0
 ```
 
-Install dependencies with:
+If a `requirements.txt` file is available, install dependencies with:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-If `requirements.txt` is not yet complete, install the required packages manually in your Python 3.10 environment.
+Otherwise, install the required packages manually in the same Python environment.
 
-## Key Outputs
+### 5. Jupyter Notebook
 
-The repository contains or generates the following research outputs:
+Most components in this repository are implemented as **Jupyter notebooks**. Ensure that Jupyter Notebook is installed and available in the active environment.
+
+To launch Jupyter Notebook:
+
+```bash
+jupyter notebook
+```
+
+### 6. Dataset Availability
+
+The project expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
+
+```text
+Phase (i) Data Preparation/QUT-DV25 Dataset/
+```
+
+Make sure the dataset files remain in their original repository structure before running the notebooks.
+
+## How to Run the Project
+
+The repository follows a four-phase execution workflow. For reproducibility and consistency, run the notebooks in the order below.
+
+### Phase 1: Data Preparation
+
+This phase introduces the dataset structure and provides visualization of the underlying data distributions.
+
+Run the following notebooks:
+
+``
+Phase (i) Data Preparation/Dataset Overview.ipynb
+Phase (i) Data Preparation/t-SNE Implementation.ipynb
+``
+
+This phase produces:
+
+* dataset overview outputs
+* trace source visualizations
+* t-SNE visualizations for dynamic, metadata, and static perspectives
+
+### Phase 2: Feature Selection
+
+This phase applies the feature selection methods used in the study.
+
+Go to:
+
+```text
+Phase (ii) Feature Selection/Feature Selection Methods/
+```
+
+The available methods are:
+
+* **ANOVA**
+* **CORR**
+* **FLAML**
+* **PSO**
+* **WOA**
+
+For each method, run the notebook corresponding to the required trace category.
+
+Example:
+
+```text
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Filetop_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Install_ANOVA.ipynb
+```
+
+Run the corresponding notebooks in the same way for CORR, FLAML, PSO, and WOA.
+
+The generated and consolidated feature selection outputs are available under:
+
+```text
+Phase (ii) Feature Selection/Feature Selection Result/
+```
+
+### Phase 3: Deep Learning Model Selection and Evaluation
+
+This phase trains and evaluates the deep learning models using the selected feature subsets.
+
+Go to:
+
+```text
+Phase (iii) DL Model Selection & Evaluation/
+```
+
+Choose the desired feature selection method directory, such as:
+
+```text
+ANOVA/
+FLAML/
+```
+
+Then open the required trace-category folder and run the corresponding notebook.
+
+Example:
+
+```text
+Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_BERT.ipynb
+Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_DistilGPT2.ipynb
+Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_LSTM.ipynb
+Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_RNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_Transformer.ipynb
+```
+
+Each notebook generates evaluation outputs inside its corresponding output directory, including:
+
+* confusion matrices
+* ROC curves
+* learning curves
+* evaluation summary files
+* training logs
+
+### Phase 4: Explainability Analysis
+
+This phase generates SHAP- and LIME-based explanations for the best-performing configuration.
+
+Run:
+
+```text
+Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
+```
+
+This notebook produces outputs in:
+
+```text
+Phase (iv) Stability & Explainability/Explainability Analysis/LIME Outputs/
+Phase (iv) Stability & Explainability/Explainability Analysis/SHAP Outputs/
+```
+
+Typical outputs include:
+
+* SHAP global feature importance plots
+* SHAP summary and waterfall plots
+* LIME dashboards
+* local explanations for benign and malicious samples
+* instance-level explanation files in HTML and PNG formats
+
+### Phase 5: Stability Analysis
+
+This phase performs comparative stability analysis across models and feature selection methods.
+
+Run:
+
+```text
+Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
+```
+
+This notebook generates outputs in:
+
+```text
+Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis Outputs/
+```
+
+Typical outputs include:
+
+* mean-std-rank summaries
+* heatmaps of model performance
+* category-wise comparison plots
+* critical difference diagram using Friedman and Nemenyi analysis
+* p-value comparison matrices
+* compact summaries of best-performing models
+
+## Recommended End-to-End Execution Order
+
+For a full reproduction of the project workflow, run the repository in the following order:
+
+1. `Dataset Overview.ipynb`
+2. `t-SNE Implementation.ipynb`
+3. feature selection notebooks for the chosen method(s)
+4. deep learning evaluation notebooks for the selected features
+5. `FLAML DL MLP Combined XAI.ipynb`
+6. `Stability Analysis.ipynb`
+
+## Main Outputs
+
+The repository contains or generates the following outputs:
 
 * dataset overview figures
+* trace source figures
 * t-SNE visualizations
 * selected feature summaries
 * confusion matrices
 * ROC curves
 * learning curves
-* evaluation summaries
+* evaluation summary files
 * training logs
-* SHAP plots
+* SHAP explanations
 * LIME dashboards and local explanations
 * stability analysis figures and statistical reports
 
 ## Best Reported Configuration
 
-The best reported setup in the project is:
+The strongest reported configuration in this repository is:
 
 * **Combined traces**
 * **FLAML feature selection**
 * **MLP model**
 
-It achieves strong detection performance together with explainability and stability analysis.
+This configuration is also used in the explainability phase.
 
 ## Citation
 
@@ -304,6 +343,6 @@ It achieves strong detection performance together with explainability and stabil
 
 ## License
 
-This project is released under the license provided in the `LICENSE` file.
+This project is distributed under the terms specified in the `LICENSE` file.
 
 
