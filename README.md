@@ -123,7 +123,7 @@ transformers==4.49.0
 
 If a `requirements.txt` file is available, install dependencies with:
 
-```bash
+```python
 pip install -r requirements.txt
 ```
 
