@@ -16,8 +16,9 @@ eDySec is an efficient, stable, and explainable DL-based dynamic analysis framew
 - Stability and Explainability Analysis   
 
 <p align="center">
-  <img src="Images/framework.jpg" alt="eDySec banner" width="60%">
+  <img src="Images/framework.jpg" alt="eDySec Framework" width="60%">
 </p>
+<p align="center"><b>Figure 1: Proposed eDySec framework for detecting malicious PyPI packages.</b></p>
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
@@ -26,6 +27,11 @@ eDySec is an efficient, stable, and explainable DL-based dynamic analysis framew
 The experiments were conducted on the **QUT-DV25** dataset, a dynamic behavioral dataset designed for malicious package detection in the **PyPI ecosystem**.
 
 ### Dataset Summary
+
+<p align="center">
+  <img src="Images/dataset_overview.jpg" alt="Dataset Overview" width="60%">
+</p>
+<p align="center"><b>Figure 2: Overview of the QUT-DV25 dataset: (a) statistics; (b) class distribution.</b></p>
 
 - **Dataset Name:** QUT-DV25
 - **Target Task:** Binary classification of benign and malicious Python packages
@@ -178,10 +184,21 @@ eDySec/
 ├── Phase (ii) Feature Selection/
 │   ├── Feature Selection Methods/
 │   │   ├── ANOVA/
+│   │   │   ├── Feature_Selection_Combined_ANOVA.ipynb
+│   │   │   ├── Feature_Selection_Filetop_ANOVA.ipynb
+│   │   │   ├── Feature_Selection_Install_ANOVA.ipynb
+│   │   │   ├── Feature_Selection_Opensnoop_ANOVA.ipynb
+│   │   │   ├── Feature_Selection_Pattern_ANOVA.ipynb
+│   │   │   ├── Feature_Selection_SysCall_ANOVA.ipynb
+│   │   │   └── Feature_Selection_TCP_ANOVA.ipynb
 │   │   ├── CORR/
+│   │   │   └── ...
 │   │   ├── FLAML/
+│   │   │   └── ...
 │   │   ├── PSO/
+│   │   │   └── ...
 │   │   └── WOA/
+│   │       └── ...
 │   ├── Feature Selection Result/
 │   │   ├── Combined.xlsx
 │   │   ├── Filetop.xlsx
@@ -196,7 +213,47 @@ eDySec/
 │   └── six_feature_selection.png
 ├── Phase (iii) DL Model Selection & Evaluation/
 │   ├── ANOVA/
-│   └── FLAML/
+│   │   └── ...
+│   ├── CORR/
+│   │   └── ...
+│   ├── FLAML/
+│   │   ├── Combined/
+│   │   │   └── ...
+│   │   ├── Filetop/
+│   │   │   └── ...
+│   │   ├── Install/
+│   │   │   └── ...
+│   │   ├── Opensnoop/
+│   │   │   └── ...
+│   │   ├── Pattern/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Attention_BERT/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Attention_DistilGPT2/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Attention_Transformer/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Classical_CNN/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Classical_LeNet/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Classical_MDCNN/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Classical_MLP/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Classical_NN/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Pre_Attention_LSTM/
+│   │   │   ├── Evaluation_Outputs_Pattern_FLAML_Pre_Attention_RNN/
+│   │   │   ├── Pattern_FLAML_BERT.ipynb
+│   │   │   ├── Pattern_FLAML_CNN.ipynb
+│   │   │   ├── Pattern_FLAML_DistilGPT2.ipynb
+│   │   │   ├── Pattern_FLAML_LeNet.ipynb
+│   │   │   ├── Pattern_FLAML_LSTM.ipynb
+│   │   │   ├── Pattern_FLAML_MDCNN.ipynb
+│   │   │   ├── Pattern_FLAML_MLP.ipynb
+│   │   │   ├── Pattern_FLAML_NN.ipynb
+│   │   │   ├── Pattern_FLAML_RNN.ipynb
+│   │   │   └── Pattern_FLAML_Transformer.ipynb
+│   │   ├── SysCall/
+│   │   │   └── ...
+│   │   └── TCP/
+│   │       └── ...
+│   ├── PSO/
+│   │   └── ...
+│   └── WOA/
+│       └── ...
 ├── Phase (iv) Stability & Explainability/
 │   ├── Explainability Analysis/
 │   │   ├── LIME Outputs/
@@ -206,6 +263,8 @@ eDySec/
 │       ├── Stability Analysis Outputs/
 │       └── Stability Analysis.ipynb
 ├── Related Works/
+├── Images/
+├── requirements.txt
 ├── LICENSE
 └── README.md
 ```
