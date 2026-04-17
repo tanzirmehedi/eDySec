@@ -1,0 +1,4 @@
+Dataset,Accuracy,Precision,Recall,F1-score,ROC AUC
+Train,0.5005506056662329,0.0,0.0,0.0,0.5
+Validation,0.5007006071929005,0.0,0.0,0.0,0.5
+Test,0.5007006071929005,0.0,0.0,0.0,0.5
