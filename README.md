@@ -322,6 +322,10 @@ Example:
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Filetop_ANOVA.ipynb
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Install_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Opensnoop_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Pattern_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_SysCall_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_TCP_ANOVA.ipynb
 ```
 
 Run the corresponding notebooks in the same way for CORR, FLAML, PSO, and WOA.
@@ -342,38 +346,57 @@ Go to:
 Phase (iii) DL Model Selection & Evaluation/
 ```
 
-Choose the desired feature selection method directory, such as:
+Choose the desired feature-selection method directory, such as:
 
 ```bash
 ANOVA/
+CORR/
 FLAML/
+├── Combined/
+├── Filetop/
+├── Install/
+├── Opensnoop/
+├── Pattern/
+├── SysCall/
+└── TCP/
+PSO/
+WOA/
 ```
 
 Then open the required trace-category folder and run the corresponding notebook.
 
-Example:
+For example, under `FLAML/Pattern/`:
 
 ```bash
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_BERT.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_DistilGPT2.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_LSTM.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_RNN.ipynb
-Phase (iii) DL Model Selection & Evaluation/ANOVA/Combined/Combined_ANOVA_Transformer.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_BERT.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_CNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_DistilGPT2.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_LeNet.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_LSTM.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_MDCNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_MLP.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_NN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_RNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_Transformer.ipynb
 ```
 
 Each notebook generates evaluation outputs inside its corresponding output directory, including:
 
-* confusion matrices
-* ROC curves
-* learning curves
-* evaluation summary files
-* training logs
+```text
+confusion matrices
+ROC curves
+learning curves
+evaluation summary files
+training logs
+```
+
+The same procedure should be followed for the other feature-selection methods (`ANOVA`, `CORR`, `PSO`, and `WOA`) by navigating to the corresponding method directory, opening the desired trace-category folder, and running the appropriate notebook following the same naming convention.
 
 ### Phase 4: Stability and Explainability Analysis
 
-This phase performs comparative stability analysis across models and feature selection methods.
+This phase performs comparative stability analysis across models and feature-selection methods, and provides explainability analysis for the best-performing configuration.
 
-Run:
+For **stability analysis**, run:
 
 ```bash
 Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
@@ -387,17 +410,14 @@ Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis Outp
 
 Typical outputs include:
 
-* mean-std-rank summaries
-* heatmaps of model performance
-* category-wise comparison plots
-* critical difference diagram using Friedman and Nemenyi analysis
-* p-value comparison matrices
-* compact summaries of best-performing models
+- mean-std-rank summaries
+- heatmaps of model performance
+- category-wise comparison plots
+- critical difference diagrams using Friedman and Nemenyi analysis
+- p-value comparison matrices
+- compact summaries of best-performing models
 
-
-This phase generates SHAP- and LIME-based explanations for the best-performing configuration.
-
-Run:
+For **explainability analysis**, run:
 
 ```bash
 Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
@@ -412,12 +432,14 @@ Phase (iv) Stability & Explainability/Explainability Analysis/SHAP Outputs/
 
 Typical outputs include:
 
-* SHAP global feature importance plots
-* SHAP summary and waterfall plots
-* LIME dashboards
-* local explanations for benign and malicious samples
-* instance-level explanation files in HTML and PNG formats
+- SHAP global feature importance plots
+- SHAP summary plots
+- SHAP waterfall plots
+- LIME dashboards
+- local explanations for benign and malicious samples
+- instance-level explanation files in HTML and PNG formats
 
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
 ## Recommended End-to-End Execution Order
 
@@ -430,7 +452,9 @@ For a full reproduction of the project workflow, run the repository in the follo
 5. `FLAML DL MLP Combined XAI.ipynb`
 6. `Stability Analysis.ipynb`
 
-## Main Outputs
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
+## Core Outputs
 
 The repository generates the following outputs:
 
@@ -447,6 +471,8 @@ The repository generates the following outputs:
 * LIME dashboards and local explanations
 * stability analysis figures and statistical reports
 
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
 ## Best Reported Configuration
 
 The strongest reported configuration in this repository is:
@@ -457,18 +483,19 @@ The strongest reported configuration in this repository is:
 
 This configuration is also used in the explainability phase.
 
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
 ## Citation
 
 ```bibtex
-@article{mehedi2026edysec,
-  title   = {eDySec: A Deep Learning-based Explainable Dynamic Analysis for Detecting Malicious Packages in the PyPI Ecosystem},
+@article{edysec,
+  title   = {eDySec: A Deep Learning-based Explainable Dynamic Analysis Framework for Detecting Malicious Packages in the PyPI Ecosystem},
   author  = {Will be added},
   year    = {will be added}
 }
 ```
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
 ## License
 
 This project is distributed under the terms specified in the `LICENSE` file.
-
-
