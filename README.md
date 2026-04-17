@@ -69,7 +69,7 @@ The analysis and experiments for eDySec were conducted in a controlled hardware 
 
 ### 2. Python Version
 
-Use **Python 3.10**.
+Use **Python 3.10.20**.
 
 ### 3. Running Instructions
 
@@ -96,19 +96,54 @@ pip install -r requirements.txt
 Typical packages used throughout the project include:
 
 ```bash
-pandas==1.5.3
-scikit-learn==1.2.2
-numpy==1.23.5
-scipy==1.9.3
-tensorflow==2.11.0
-matplotlib==3.7.1
-seaborn==0.12.2
-joblib==1.3.2
-shap==0.41.0
-flaml==2.5.0
-notebook==6.5.6
-transformers==4.49.0
+`pandas==1.5.3`,  
+`scikit-learn==1.2.2`,  
+`openpyxl`,  
+`numpy==1.23.5`,  
+`scipy==1.9.3`,  
+`tensorflow==2.11.0`,  
+`matplotlib==3.7.1`,  
+`seaborn==0.12.2`,  
+`joblib==1.3.2`,  
+`shap==0.41.0`,  
+`lime`,  
+`flaml[automl]==2.5.0`,  
+`notebook==6.5.6`,  
+`pywinpty==2.0.10`  (Only for windows)  `threadpoolctl==3.1.0` (for Ubuntu)   
+`terminado==0.17.1`,  
+`transformers==4.49.0`.
 ```
+These versions were used to ensure **consistent and reproducible experimental results**.
+
+============================================================
+Python Version
+============================================================
+3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]
+
+============================================================
+Core Library Versions
+============================================================
+NumPy            : 1.23.5
+Pandas           : 1.5.3
+Matplotlib       : 3.7.1
+Seaborn          : 0.12.2
+SciPy            : 1.9.3
+Scikit-learn     : 1.2.2
+TensorFlow       : 2.11.0
+Transformers     : 4.38.2
+Joblib           : 1.3.2
+
+============================================================
+Keras Version
+============================================================
+Keras (tf.keras) : 2.11.0
+
+============================================================
+CUDA / GPU Info
+============================================================
+Built with CUDA  : True
+GPU Available    : True
+GPUs             : [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
 
 ### 5. Jupyter Notebook
 
