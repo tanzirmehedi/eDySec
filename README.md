@@ -53,7 +53,7 @@ eDySec analyzes six core trace categories, plus a combined representation:
 | **Combined**  | Joint representation built from all trace categories                  |
 
 <p align="center">
-  <img src="Images/framework.jpg" alt="Dataset Overview" width="60%">
+  <img src="Images/dataset_overview.jpg" alt="Dataset Overview" width="60%">
 </p>
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
