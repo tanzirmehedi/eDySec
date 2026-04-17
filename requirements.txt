@@ -1,0 +1,16 @@
+pandas==1.5.3 
+scikit-learn==1.2.2 
+numpy==1.23.5 
+scipy==1.9.3 
+tensorflow==2.11.0 
+matplotlib==3.7.1 
+seaborn==0.12.2 
+joblib==1.3.2 
+lime 
+openpyxl 
+notebook==6.5.6 
+terminado==0.17.1
+shap==0.43.0
+flaml[automl]==2.5.0
+transformers==4.38.2
+threadpoolctl==3.1.0
