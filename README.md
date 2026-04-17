@@ -60,18 +60,38 @@ Before running the project, ensure that the following requirements are satisfied
 
 ### 1. Experimental Environment
 
-The analysis and experiments for eDySec were conducted in a controlled hardware environment with the following specifications.
+The analysis and experimental evaluation of **eDySec** were conducted in a controlled hardware and software environment. The reported configuration is provided below for reproducibility and reference, and reflects the setup used for model development, training, and evaluation.
 
+#### Hardware and Operating System
 - **Processor:** 13th Gen Intel Core i9-13900K
 - **Memory:** 128 GB RAM
 - **GPU:** NVIDIA RTX A6000 with 48 GB memory
 - **Operating System:** Ubuntu 22.04 LTS (64-bit)
 
-### 2. Python Version
+#### Python Environment
+- **Python Version:** 3.10.20  
+- **Compiler:** GCC 14.3.0
 
-Use **Python 3.10.20**.
+#### Core Library Versions
+- **NumPy:** 1.23.5
+- **Pandas:** 1.5.3
+- **Matplotlib:** 3.7.1
+- **Seaborn:** 0.12.2
+- **SciPy:** 1.9.3
+- **Scikit-learn:** 1.2.2
+- **TensorFlow:** 2.11.0
+- **Transformers:** 4.38.2
+- **Joblib:** 1.3.2
 
-### 3. Running Instructions
+#### Deep Learning Backend
+- **Keras (`tf.keras`):** 2.11.0
+
+#### GPU Configuration
+- **TensorFlow Built with CUDA:** Yes
+- **GPU Available:** Yes
+- **Detected GPU(s):** `GPU:0`
+  
+### 2. Running Instructions
 
 ### Option 1: pip
 
@@ -91,7 +111,7 @@ conda activate edysec
 pip install -r requirements.txt
 ```
 
-### 4. Required Python Packages
+### 3. Required Python Packages
 
 Typical packages used throughout the project include:
 
@@ -115,37 +135,7 @@ Typical packages used throughout the project include:
 ```
 These versions were used to ensure **consistent and reproducible experimental results**.
 
-============================================================
-Python Version
-============================================================
-3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]
-
-============================================================
-Core Library Versions
-============================================================
-NumPy            : 1.23.5
-Pandas           : 1.5.3
-Matplotlib       : 3.7.1
-Seaborn          : 0.12.2
-SciPy            : 1.9.3
-Scikit-learn     : 1.2.2
-TensorFlow       : 2.11.0
-Transformers     : 4.38.2
-Joblib           : 1.3.2
-
-============================================================
-Keras Version
-============================================================
-Keras (tf.keras) : 2.11.0
-
-============================================================
-CUDA / GPU Info
-============================================================
-Built with CUDA  : True
-GPU Available    : True
-GPUs             : [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
-
-### 5. Jupyter Notebook
+### 4. Jupyter Notebook
 
 To launch Jupyter Notebook:
 
@@ -154,7 +144,7 @@ pip install notebook
 jupyter notebook
 ```
 
-### 6. Dataset Availability
+### 5. Dataset Availability
 
 The project expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
 
