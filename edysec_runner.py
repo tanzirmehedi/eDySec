@@ -10,7 +10,6 @@ What this script does
 4. Executes notebooks in the correct phase order.
 5. Saves executed notebook copies while preserving the original folder structure.
 
-Designed for repositories structured like the eDySec layout described in the README.
 """
 
 from __future__ import annotations
