@@ -489,7 +489,7 @@ This configuration is also used in the explainability phase.
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
-## How to Run the Project in GitHub Dev Environment or Local PC (using edysec_runner.py)
+## How to Run the Project in GitHub Dev Env (using edysec_runner.py)
 
 This repository includes `edysec_runner.py`, a Python utility to help you **check the project structure**, **set up the environment**, and **run all Jupyter notebooks (`.ipynb`)** across folders and subfolders in the correct order.
 
