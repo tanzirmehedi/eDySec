@@ -51,7 +51,13 @@ PHASE4_PRIORITY = [
 
 FEATURE_METHODS = ["ANOVA", "CORR", "FLAML", "PSO", "WOA"]
 TRACE_NAMES = ["Combined", "Filetop", "Install", "Opensnoop", "Pattern", "SysCall", "TCP"]
-COMBINED_DATASET_FILE = "QUT-DV25_Combined_Traces.csv"
+
+SKIPPABLE_MISSING_DATASET_FILES = [
+    "QUT-DV25_Combined_Traces.csv",
+    "metadata_dataset.csv",
+    "static_dataset.csv",
+    "QUT-DV25_dynamic_dataset.csv",
+]
 
 SKIP_DIR_KEYWORDS = {
     "Evaluation_Outputs",
@@ -78,7 +84,7 @@ class RunResult:
 # Utility helpers
 # ------------------------------
 def build_dataset_sources(repo_root: Path) -> dict[str, Path]:
-    """Index dataset CSV files by basename from Phase (i), then from the repo."""
+    """Index dataset CSV files by basename from Phase (i), then from repo-wide fallback."""
     sources: dict[str, Path] = {}
 
     dataset_root = repo_root / "Phase (i) Data Preparation" / "QUT-DV25 Dataset"
@@ -86,9 +92,17 @@ def build_dataset_sources(repo_root: Path) -> dict[str, Path]:
         for csv_file in sorted(dataset_root.rglob("*.csv")):
             sources[csv_file.name] = csv_file
 
-    # Fallback: include matching traces found elsewhere.
+    # Existing trace files anywhere.
     for csv_file in sorted(repo_root.rglob("QUT-DV25_*_Traces.csv")):
         sources.setdefault(csv_file.name, csv_file)
+
+    # Ensure known required files are captured if present anywhere.
+    for filename in SKIPPABLE_MISSING_DATASET_FILES:
+        if filename in sources:
+            continue
+        matches = sorted(repo_root.rglob(filename))
+        if matches:
+            sources[filename] = matches[0]
 
     return sources
 
@@ -102,30 +116,35 @@ def notebook_references_dataset_file(notebook_path: Path, dataset_filename: str)
     return dataset_filename in content
 
 
-def notebook_requires_missing_combined(
+def notebook_requires_missing_dataset(
     notebook_path: Path,
+    dataset_filename: str,
     dataset_sources: dict[str, Path],
-    reference_cache: dict[Path, bool],
+    reference_cache: dict[tuple[Path, str], bool],
 ) -> bool:
-    """Return True when notebook references Combined CSV but file is unavailable."""
-    if COMBINED_DATASET_FILE in dataset_sources:
+    """True when notebook references dataset_filename and that file is unavailable."""
+    if dataset_filename in dataset_sources:
         return False
 
-    resolved = notebook_path.resolve()
-    if resolved not in reference_cache:
-        reference_cache[resolved] = notebook_references_dataset_file(
-            notebook_path,
-            COMBINED_DATASET_FILE,
-        )
-    return reference_cache[resolved]
+    key = (notebook_path.resolve(), dataset_filename)
+    if key not in reference_cache:
+        reference_cache[key] = notebook_references_dataset_file(notebook_path, dataset_filename)
+    return reference_cache[key]
 
 
-def is_missing_combined_file_error(error_text: Optional[str]) -> bool:
-    """Runtime fallback detection for dynamically-built missing Combined CSV path."""
+def detect_missing_dataset_file_error(error_text: Optional[str]) -> Optional[str]:
+    """Return missing dataset filename from runtime error text, else None."""
     if not error_text:
-        return False
+        return None
+
     t = error_text.lower()
-    return "filenotfounderror" in t and COMBINED_DATASET_FILE.lower() in t
+    if "filenotfounderror" not in t:
+        return None
+
+    for filename in SKIPPABLE_MISSING_DATASET_FILES:
+        if filename.lower() in t:
+            return filename
+    return None
 
 
 def stage_dataset_aliases_for_notebook(
@@ -422,9 +441,11 @@ def filter_notebooks_by_selector(
 
     candidates: List[str] = []
     if len(selectors) > 1:
+        # Supports unquoted multi-word notebook names.
         candidates.append(" ".join(selectors).strip())
     candidates.extend(selectors)
 
+    # Direct path match.
     for cand in candidates:
         p = Path(cand)
         for dp in (p, repo_root / p):
@@ -434,6 +455,7 @@ def filter_notebooks_by_selector(
                     seen.add(rp)
                     selected.append(rp)
 
+    # Match against discovered list.
     lowered = [c.lower() for c in candidates if c.strip()]
     for nb in notebooks:
         rel = str(nb.relative_to(repo_root)).lower()
@@ -558,21 +580,24 @@ def run_notebooks(
     info(f"Total notebooks selected: {len(notebooks)}")
     results: List[RunResult] = []
     dataset_sources = build_dataset_sources(repo_root)
-    combined_warned = False
-    reference_cache: dict[Path, bool] = {}
+    warned_missing_files: set[str] = set()
+    reference_cache: dict[tuple[Path, str], bool] = {}
 
     for idx, notebook in enumerate(notebooks, start=1):
         rel = notebook.relative_to(repo_root)
 
-        # Pre-check skip (for direct string references in notebook JSON)
-        if notebook_requires_missing_combined(notebook, dataset_sources, reference_cache):
-            if not combined_warned:
-                warn(
-                    f"{COMBINED_DATASET_FILE} was not found in Phase (i) Data Preparation/QUT-DV25 Dataset "
-                    "or elsewhere in the repository. Skipping notebooks that require it."
-                )
-                combined_warned = True
-            warn(f"Skipping notebook because required combined dataset is missing: {rel}")
+        # Pre-check skip only when required dataset is actually missing.
+        missing_file: Optional[str] = None
+        for dataset_name in SKIPPABLE_MISSING_DATASET_FILES:
+            if notebook_requires_missing_dataset(notebook, dataset_name, dataset_sources, reference_cache):
+                missing_file = dataset_name
+                break
+
+        if missing_file is not None:
+            if missing_file not in warned_missing_files:
+                warn(f"{missing_file} was not found. Skipping notebooks that require it.")
+                warned_missing_files.add(missing_file)
+            warn(f"Skipping notebook because required dataset is missing ({missing_file}): {rel}")
             continue
 
         stage_dataset_aliases_for_notebook(notebook, dataset_sources)
@@ -589,15 +614,13 @@ def run_notebooks(
             allow_errors=allow_errors,
         )
 
-        # Runtime fallback skip (for dynamic filename construction inside code cells)
-        if (not result.success) and is_missing_combined_file_error(result.error):
-            if not combined_warned:
-                warn(
-                    f"{COMBINED_DATASET_FILE} is missing. "
-                    "Skipping notebooks that require Combined traces."
-                )
-                combined_warned = True
-            warn(f"Skipping notebook after runtime missing-file detection: {rel}")
+        # Runtime fallback (dynamic filename creation inside code cells).
+        runtime_missing = detect_missing_dataset_file_error(result.error)
+        if (not result.success) and runtime_missing is not None and runtime_missing not in dataset_sources:
+            if runtime_missing not in warned_missing_files:
+                warn(f"{runtime_missing} is missing. Skipping notebooks that require it.")
+                warned_missing_files.add(runtime_missing)
+            warn(f"Skipping notebook after runtime missing-file detection ({runtime_missing}): {rel}")
             continue
 
         results.append(result)
