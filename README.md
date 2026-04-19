@@ -82,6 +82,7 @@ The analysis and experimental evaluation of **eDySec** were conducted in a contr
 - **NumPy:** 1.23.5
 - **Pandas:** 1.5.3
 - **Matplotlib:** 3.7.1
+- **scikit-posthocs:** 0.12.0
 - **Seaborn:** 0.12.2
 - **SciPy:** 1.9.3
 - **Scikit-learn:** 1.2.2
@@ -137,7 +138,8 @@ Typical packages used throughout the project include:
 `notebook==6.5.6`,  
 `pywinpty==2.0.10`  (Only for windows)  `threadpoolctl==3.1.0` (for Ubuntu)   
 `terminado==0.17.1`,  
-`transformers==4.49.0`.
+`transformers==4.49.0`,
+`scikit-posthocs==0.12.0`.
 ```
 These versions were used to ensure **consistent and reproducible experimental results**.
 
