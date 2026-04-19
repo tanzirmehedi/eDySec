@@ -66,6 +66,8 @@ Before running the project, ensure that the following requirements are satisfied
 
 ### 1. Experimental Environment
 
+For GitHub Codespaces (Dev environment), the default configuration is sufficient to reproduce outputs. However, performance may vary or degrade due to limited hardware resources compared to the local experimental setup described below. For full-scale training and evaluation, the following local environment was used.
+
 The analysis and experimental evaluation of **eDySec** were conducted in a controlled hardware and software environment. The reported configuration is provided below for reproducibility and reference, and reflects the setup used for model development, training, and evaluation.
 
 #### Hardware and Operating System
@@ -96,71 +98,6 @@ The analysis and experimental evaluation of **eDySec** were conducted in a contr
 #### GPU Configuration
 - **TensorFlow Built with CUDA:** Yes
 - **GPU Available:** Yes
-- **Detected GPU(s):** `GPU:0`
-  
-### 2. Running Instructions
-
-### Option 1: pip
-
-```bash
-git clone https://github.com/tanzirmehedi/eDySec.git
-cd eDySec
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### Option 2: conda
-
-```bash
-conda create -n edysec python=3.10 -y
-conda activate edysec
-pip install -r requirements.txt
-```
-
-### 3. Required Python Packages
-
-Typical packages used throughout the project include:
-
-```bash
-`pandas==1.5.3`,  
-`scikit-learn==1.2.2`,  
-`openpyxl`,  
-`numpy==1.23.5`,  
-`scipy==1.9.3`,  
-`tensorflow==2.11.0`,  
-`matplotlib==3.7.1`,  
-`seaborn==0.12.2`,  
-`joblib==1.3.2`,  
-`shap==0.41.0`,  
-`lime`,  
-`flaml[automl]==2.5.0`,  
-`notebook==6.5.6`,  
-`pywinpty==2.0.10`  (Only for windows)  `threadpoolctl==3.1.0` (for Ubuntu)   
-`terminado==0.17.1`,  
-`transformers==4.49.0`,
-`scikit-posthocs==0.12.0`.
-```
-These versions were used to ensure **consistent and reproducible experimental results**.
-
-### 4. Jupyter Notebook
-
-To launch Jupyter Notebook:
-
-```bash
-pip install notebook
-jupyter notebook
-```
-
-### 5. Dataset Availability
-
-The project expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
-
-```bash
-Phase (i) Data Preparation/QUT-DV25 Dataset/
-```
-
-Make sure the dataset files remain in their original repository structure before running the notebooks.
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
@@ -276,222 +213,7 @@ Make sure the dataset files remain in their original repository structure before
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
-## How to Run the Project (Individual Script)
-
-The repository follows a four-phase execution workflow. For reproducibility and consistency, run the notebooks in the order below.
-
-<p align="center">
-  <img src="Images/motivation.jpg" alt="eDySec banner" width="60%">
-</p>
-<p align="center"><b>Figure 3: Overall system architecture of the proposed eDySec framework.</b></p>
-
-### Phase 1: Data Preparation
-
-This phase introduces the dataset structure and provides visualization of the underlying data distributions.
-
-Run the following notebooks:
-
-```bash
-Phase (i) Data Preparation/Dataset Overview.ipynb    
-Phase (i) Data Preparation/t-SNE Implementation.ipynb
-```
-
-This phase produces:
-
-* dataset overview outputs
-* trace source visualizations
-* t-SNE visualizations for dynamic, metadata, and static perspectives
-
-### Phase 2: Feature Selection
-
-This phase applies the feature selection methods used in the study.
-
-Go to:
-
-```bash
-Phase (ii) Feature Selection/Feature Selection Methods/
-```
-
-The available methods are:
-
-* **ANOVA**
-* **CORR**
-* **FLAML**
-* **PSO**
-* **WOA**
-
-For each method, run the notebook corresponding to the required trace category.
-
-Example:
-
-```bash
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Filetop_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Install_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Opensnoop_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Pattern_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_SysCall_ANOVA.ipynb
-Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_TCP_ANOVA.ipynb
-```
-
-Run the corresponding notebooks in the same way for CORR, FLAML, PSO, and WOA.
-
-The generated and consolidated feature selection outputs are available under:
-
-```bash
-Phase (ii) Feature Selection/Feature Selection Result/
-```
-
-### Phase 3: Model Selection and Evaluation
-
-This phase trains and evaluates the deep learning models using the selected feature subsets.
-
-Go to:
-
-```bash
-Phase (iii) DL Model Selection & Evaluation/
-```
-
-Choose the desired feature-selection method directory, such as:
-
-```bash
-ANOVA/
-CORR/
-FLAML/
-├── Combined/
-├── Filetop/
-├── Install/
-├── Opensnoop/
-├── Pattern/
-├── SysCall/
-└── TCP/
-PSO/
-WOA/
-```
-
-Then open the required trace-category folder and run the corresponding notebook.
-
-For example, under `FLAML/Pattern/`:
-
-```bash
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_BERT.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_CNN.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_DistilGPT2.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_LeNet.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_LSTM.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_MDCNN.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_MLP.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_NN.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_RNN.ipynb
-Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_Transformer.ipynb
-```
-
-Each notebook generates evaluation outputs inside its corresponding output directory, including:
-
-```text
-confusion matrices
-ROC curves
-learning curves
-evaluation summary files
-training logs
-```
-
-The same procedure should be followed for the other feature-selection methods (`ANOVA`, `CORR`, `PSO`, and `WOA`) by navigating to the corresponding method directory, opening the desired trace-category folder, and running the appropriate notebook following the same naming convention.
-
-### Phase 4: Stability and Explainability Analysis
-
-This phase performs comparative stability analysis across models and feature-selection methods, and provides explainability analysis for the best-performing configuration.
-
-For **stability analysis**, run:
-
-```bash
-Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
-```
-
-This notebook generates outputs in:
-
-```bash
-Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis Outputs/
-```
-
-Typical outputs include:
-
-- mean-std-rank summaries
-- heatmaps of model performance
-- category-wise comparison plots
-- critical difference diagrams using Friedman and Nemenyi analysis
-- p-value comparison matrices
-- compact summaries of best-performing models
-
-For **explainability analysis**, run:
-
-```bash
-Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
-```
-
-This notebook produces outputs in:
-
-```bash
-Phase (iv) Stability & Explainability/Explainability Analysis/LIME Outputs/
-Phase (iv) Stability & Explainability/Explainability Analysis/SHAP Outputs/
-```
-
-Typical outputs include:
-
-- SHAP global feature importance plots
-- SHAP summary plots
-- SHAP waterfall plots
-- LIME dashboards
-- local explanations for benign and malicious samples
-- instance-level explanation files in HTML and PNG formats
-
----
-
-### Recommended End-to-End Execution Order
-
-For a full reproduction of the project workflow, run the repository in the following order:
-
-1. `Dataset Overview.ipynb`
-2. `t-SNE Implementation.ipynb`
-3. feature selection notebooks for the chosen method(s)
-4. deep learning evaluation notebooks for the selected features
-5. `FLAML DL MLP Combined XAI.ipynb`
-6. `Stability Analysis.ipynb`
-
----
-
-### Core Outputs
-
-The repository generates the following outputs:
-
-* dataset overview figures
-* trace source figures
-* t-SNE visualizations
-* selected feature summaries
-* confusion matrices
-* ROC curves
-* learning curves
-* evaluation summary files
-* training logs
-* SHAP explanations
-* LIME dashboards and local explanations
-* stability analysis figures and statistical reports
-
----
-
-### Best Reported Configuration
-
-The strongest reported configuration in this repository is:
-
-* **Combined traces**
-* **FLAML feature selection**
-* **MLP model**
-
-This configuration is also used in the explainability phase.
-
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
-
-## How to Run the Project in GitHub Dev Env (using edysec_runner.py)
+## How to Run the Project in GitHub Dev Env
 
 This repository includes `edysec_runner.py`, a Python utility to help you **check the project structure**, **set up the environment**, and **run all Jupyter notebooks (`.ipynb`)** across folders and subfolders in the correct order.
 
@@ -785,6 +507,283 @@ After execution, check:
 
 - `executed_notebooks/` for executed notebook copies
 - `execution_summary.json` for run status and summary information
+
+
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
+  
+## How to Run the Project (Local PC)
+
+### Option 1: pip
+
+```bash
+git clone https://github.com/tanzirmehedi/eDySec.git
+cd eDySec
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Option 2: conda
+
+```bash
+conda create -n edysec python=3.10 -y
+conda activate edysec
+pip install -r requirements.txt
+```
+
+### 3. Required Python Packages
+
+Typical packages used throughout the project include:
+
+```bash
+`pandas==1.5.3`,  
+`scikit-learn==1.2.2`,  
+`openpyxl`,  
+`numpy==1.23.5`,  
+`scipy==1.9.3`,  
+`tensorflow==2.11.0`,  
+`matplotlib==3.7.1`,  
+`seaborn==0.12.2`,  
+`joblib==1.3.2`,  
+`shap==0.41.0`,  
+`lime`,  
+`flaml[automl]==2.5.0`,  
+`notebook==6.5.6`,  
+`pywinpty==2.0.10`  (Only for windows)  `threadpoolctl==3.1.0` (for Ubuntu)   
+`terminado==0.17.1`,  
+`transformers==4.49.0`,
+`scikit-posthocs==0.12.0`.
+```
+These versions were used to ensure **consistent and reproducible experimental results**.
+
+### 4. Jupyter Notebook
+
+To launch Jupyter Notebook:
+
+```bash
+pip install notebook
+jupyter notebook
+```
+
+### 5. Dataset Availability
+
+The project expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
+
+```bash
+Phase (i) Data Preparation/QUT-DV25 Dataset/
+```
+
+Make sure the dataset files remain in their original repository structure before running the notebooks.
+
+
+### 6. Phase-based Instructions
+
+The repository follows a four-phase execution workflow. For reproducibility and consistency, run the notebooks in the order below.
+
+#### Phase 1: Data Preparation
+
+This phase introduces the dataset structure and provides visualization of the underlying data distributions.
+
+Run the following notebooks:
+
+```bash
+Phase (i) Data Preparation/Dataset Overview.ipynb    
+Phase (i) Data Preparation/t-SNE Implementation.ipynb
+```
+
+This phase produces:
+
+* dataset overview outputs
+* trace source visualizations
+* t-SNE visualizations for dynamic, metadata, and static perspectives
+
+#### Phase 2: Feature Selection
+
+This phase applies the feature selection methods used in the study.
+
+Go to:
+
+```bash
+Phase (ii) Feature Selection/Feature Selection Methods/
+```
+
+The available methods are:
+
+* **ANOVA**
+* **CORR**
+* **FLAML**
+* **PSO**
+* **WOA**
+
+For each method, run the notebook corresponding to the required trace category.
+
+Example:
+
+```bash
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Filetop_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Install_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Opensnoop_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Pattern_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_SysCall_ANOVA.ipynb
+Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_TCP_ANOVA.ipynb
+```
+
+Run the corresponding notebooks in the same way for CORR, FLAML, PSO, and WOA.
+
+The generated and consolidated feature selection outputs are available under:
+
+```bash
+Phase (ii) Feature Selection/Feature Selection Result/
+```
+
+#### Phase 3: Model Selection and Evaluation
+
+This phase trains and evaluates the deep learning models using the selected feature subsets.
+
+Go to:
+
+```bash
+Phase (iii) DL Model Selection & Evaluation/
+```
+
+Choose the desired feature-selection method directory, such as:
+
+```bash
+ANOVA/
+CORR/
+FLAML/
+├── Combined/
+├── Filetop/
+├── Install/
+├── Opensnoop/
+├── Pattern/
+├── SysCall/
+└── TCP/
+PSO/
+WOA/
+```
+
+Then open the required trace-category folder and run the corresponding notebook.
+
+For example, under `FLAML/Pattern/`:
+
+```bash
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_BERT.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_CNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_DistilGPT2.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_LeNet.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_LSTM.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_MDCNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_MLP.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_NN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_RNN.ipynb
+Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_Transformer.ipynb
+```
+
+Each notebook generates evaluation outputs inside its corresponding output directory, including:
+
+```text
+confusion matrices
+ROC curves
+learning curves
+evaluation summary files
+training logs
+```
+
+The same procedure should be followed for the other feature-selection methods (`ANOVA`, `CORR`, `PSO`, and `WOA`) by navigating to the corresponding method directory, opening the desired trace-category folder, and running the appropriate notebook following the same naming convention.
+
+#### Phase 4: Stability and Explainability Analysis
+
+This phase performs comparative stability analysis across models and feature-selection methods, and provides explainability analysis for the best-performing configuration.
+
+For **stability analysis**, run:
+
+```bash
+Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
+```
+
+This notebook generates outputs in:
+
+```bash
+Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis Outputs/
+```
+
+Typical outputs include:
+
+- mean-std-rank summaries
+- heatmaps of model performance
+- category-wise comparison plots
+- critical difference diagrams using Friedman and Nemenyi analysis
+- p-value comparison matrices
+- compact summaries of best-performing models
+
+For **explainability analysis**, run:
+
+```bash
+Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
+```
+
+This notebook produces outputs in:
+
+```bash
+Phase (iv) Stability & Explainability/Explainability Analysis/LIME Outputs/
+Phase (iv) Stability & Explainability/Explainability Analysis/SHAP Outputs/
+```
+
+Typical outputs include:
+
+- SHAP global feature importance plots
+- SHAP summary plots
+- SHAP waterfall plots
+- LIME dashboards
+- local explanations for benign and malicious samples
+- instance-level explanation files in HTML and PNG formats
+
+---
+
+### Recommended End-to-End Execution Order
+
+For a full reproduction of the project workflow, run the repository in the following order:
+
+1. `Dataset Overview.ipynb`
+2. `t-SNE Implementation.ipynb`
+3. feature selection notebooks for the chosen method(s)
+4. deep learning evaluation notebooks for the selected features
+5. `FLAML DL MLP Combined XAI.ipynb`
+6. `Stability Analysis.ipynb`
+
+---
+
+### Core Outputs
+
+The repository generates the following outputs:
+
+* dataset overview figures
+* trace source figures
+* t-SNE visualizations
+* selected feature summaries
+* confusion matrices
+* ROC curves
+* learning curves
+* evaluation summary files
+* training logs
+* SHAP explanations
+* LIME dashboards and local explanations
+* stability analysis figures and statistical reports
+
+---
+
+### Best Reported Configuration
+
+The strongest reported configuration in this repository is:
+
+* **Combined traces**
+* **FLAML feature selection**
+* **MLP model**
+
+This configuration is also used in the explainability phase.
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
