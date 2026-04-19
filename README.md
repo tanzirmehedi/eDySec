@@ -625,7 +625,7 @@ python edysec_runner.py run --dry-run
 #### Run only specific script within a Phase
 
 ```bash
-python edysec_runner.py run --phase 2 --method PSO --trace SysCall --continue-on-error
+python edysec_runner.py run --phase 2 --method PSO --trace SysCall
 ```
 
 #### Run only FLAML notebooks
