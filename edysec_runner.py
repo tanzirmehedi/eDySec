@@ -3,7 +3,7 @@
 End-to-end runner for the eDySec repository.
 
 What this script does
----------------------
+----------------------
 1. Checks the repository structure and warns about missing key folders/files.
 2. Optionally installs dependencies from requirements.txt.
 3. Discovers notebooks across nested folders and subfolders.
