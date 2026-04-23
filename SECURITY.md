@@ -33,7 +33,6 @@ eDySec is currently supported in the latest maintained codebase and in the valid
 > - **Compiler:** GCC 14.3.0  
 > - **TensorFlow Built with CUDA:** Yes  
 > - **GPU Available:** Yes  
-> - **Detected GPU(s):** GPU:0  
 
 ## Reporting a Vulnerability
 
