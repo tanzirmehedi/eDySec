@@ -1,6 +1,6 @@
-## Replication Package - eDySec (Empirical Dynamic Security)
+# An Empirical Study of Deep Learning for Dynamic Behavioral Detection of Malicious Software Packages
 
-### An Empirical Study of Deep Learning for Dynamic Behavioral Detection of Malicious Software Packages
+**Replication Package — empiDySec (Empirical Dynamic Security)**
 
 ---
 
@@ -8,81 +8,115 @@
 
 ---
 
-## Overview
+## 1. Study Overview
 
-Empirical Dynamic Security (eDySec) is an efficient, stable, and explainable deep learning (DL)-based empirical dynamic analysis approach for detecting malicious software packages using the QUT-DV25 dataset. It is designed to address the challenges associated with high-dimensional, sparse, and heterogeneous dynamic behavioral data. As illustrated in Figure~\ref{fig:framework}, the empirical study consists of four main phases:
+This repository contains the complete replication package for our empirical study on deep learning (DL)-based **dynamic behavioral detection of malicious software packages** in the PyPI ecosystem. The study systematically investigates how feature selection strategies, DL architectures, trace categories, model stability, and explainability interact when detecting malicious packages from high-dimensional, sparse, and heterogeneous dynamic behavioral data.
 
-- Data Preparation    
-- Feature Selection    
-- Model Selection and Evaluation    
-- Stability and Explainability Analysis   
+The study is operationalized through **empiDySec** — an efficient, stable, and explainable DL-based empirical dynamic analysis approach evaluated on the **QUT-DV25** dataset. As illustrated in Figure 1, the empirical study is structured into four sequential phases:
+
+1. **Data Preparation** — dataset characterization and visualization
+2. **Feature Selection** — comparative evaluation of five selection strategies
+3. **Model Selection and Evaluation** — benchmarking of ten DL architectures
+4. **Stability and Explainability Analysis** — statistical robustness testing and XAI interpretation
 
 <p align="center">
-  <img src="Images/framework.jpg" alt="eDySec Framework" width="60%">
+  <img src="Images/framework.jpg" alt="empiDySec Study Workflow" width="60%">
 </p>
-<p align="center"><b>Figure 1: Proposed eDySec framework for detecting malicious PyPI packages.</b></p>
+<p align="center"><b>Figure 1: Workflow of the empiDySec empirical study for detecting malicious PyPI packages.</b></p>
 
 ---
 
-## Dataset Overview
+## 2. Research Questions
 
-The experiments were conducted on the **QUT-DV25** dataset, a dynamic behavioral dataset designed for malicious package detection in the **PyPI ecosystem**.
+The empirical study is designed around the following research questions:
 
-### Dataset Summary
+- **RQ1 (Data Characterization):** What are the structural and distributional characteristics of dynamic behavioral traces collected from benign and malicious PyPI packages, and how separable are the classes across dynamic, metadata, and static perspectives?
+- **RQ2 (Feature Selection):** How do different feature selection methods (ANOVA, CORR, FLAML, PSO, WOA) affect the quality of feature subsets derived from each trace category and their combined representation?
+- **RQ3 (Model Effectiveness):** Which DL architectures (classical, recurrent, and attention-based) achieve the strongest detection performance across trace categories and feature-selection methods?
+- **RQ4 (Stability):** How stable are model rankings across repeated evaluations, and are observed performance differences statistically significant (Friedman and Nemenyi post-hoc analysis)?
+- **RQ5 (Explainability):** Which behavioral features drive the predictions of the best-performing configuration, as revealed by SHAP and LIME analysis?
+
+Each research question maps directly to one phase of the repository (RQ1 → Phase i, RQ2 → Phase ii, RQ3 → Phase iii, RQ4–RQ5 → Phase iv).
+
+---
+
+## 3. Subject Dataset: QUT-DV25
+
+All experiments were conducted on **QUT-DV25**, a dynamic behavioral dataset constructed for malicious package detection in the **PyPI ecosystem**.
 
 <p align="center">
   <img src="Images/dataset_overview.jpg" alt="Dataset Overview" width="60%">
 </p>
 <p align="center"><b>Figure 2: Overview of the QUT-DV25 dataset: (a) statistics; (b) class distribution.</b></p>
 
-- **Dataset Name:** QUT-DV25
-- **Target Task:** Binary classification of benign and malicious Python packages
-- **Ecosystem:** PyPI
-- **Total Packages:** 14,271 (7,127 malicious packages)
-- **Analysis Type:** Dynamic behavioral analysis
-- **Execution Phases:** Install-time and post-installation
-- **Trace Categories:** Filetop, Opensnoop, Install, TCP, SysCall, Pattern
-- **Feature Representation:** Individual trace-based features and a combined feature space
-- **Output Classes:** Benign / Malicious
-- **Dataset DOI:** https://doi.org/10.7910/DVN/LBMXJY
+| Property | Value |
+| --- | --- |
+| **Dataset name** | QUT-DV25 |
+| **Target task** | Binary classification (benign vs. malicious Python packages) |
+| **Ecosystem** | PyPI |
+| **Total packages** | 14,271 (7,127 malicious) |
+| **Analysis type** | Dynamic behavioral analysis |
+| **Execution phases** | Install-time and post-installation |
+| **Trace categories** | Filetop, Opensnoop, Install, TCP, SysCall, Pattern |
+| **Feature representation** | Individual trace-based features and a combined feature space |
+| **Output classes** | Benign / Malicious |
+| **Dataset DOI** | https://doi.org/10.7910/DVN/LBMXJY |
 
-### Trace Categories
+### 3.1 Trace Categories (Independent Variables)
 
-eDySec analyzes six core trace categories, plus a combined representation:
+The study analyzes six core trace categories, plus a combined representation:
 
-| Trace Type    | Description                                                           |
-| ------------- | --------------------------------------------------------------------- |
-| **Filetop**   | File activity summaries and file interaction behavior                 |
-| **Opensnoop** | File open operations and related access patterns                      |
-| **Install**   | Installation-phase activity and package setup behavior                |
-| **TCP**       | Network communication behavior                                        |
-| **SysCall**   | System call-level runtime interactions                                |
-| **Pattern**   | Behavioral pattern representations extracted from execution artifacts |
-| **Combined**  | Joint representation built from all trace categories                  |
+| Trace Type | Description |
+| --- | --- |
+| **Filetop** | File activity summaries and file interaction behavior |
+| **Opensnoop** | File open operations and related access patterns |
+| **Install** | Installation-phase activity and package setup behavior |
+| **TCP** | Network communication behavior |
+| **SysCall** | System call-level runtime interactions |
+| **Pattern** | Behavioral pattern representations extracted from execution artifacts |
+| **Combined** | Joint representation built from all trace categories |
 
 ---
 
-## Running Prerequisites
+## 4. Study Design
 
-Before running the project, ensure that the following requirements are satisfied.
+### 4.1 Experimental Factors
 
-### 1. Experimental Environment
+The empirical evaluation forms a full factorial design over three factors:
 
-For GitHub Codespaces (Dev environment), the default configuration is sufficient to reproduce outputs. However, performance may vary or degrade due to limited hardware resources compared to the local experimental setup described below. For full-scale training and evaluation, the following local environment was used.
+- **Feature selection method (5 levels):** ANOVA, CORR, FLAML, PSO, WOA
+- **Trace category (7 levels):** Filetop, Opensnoop, Install, TCP, SysCall, Pattern, Combined
+- **DL architecture (10 levels):** MLP, NN, CNN, LeNet, MDCNN, RNN, LSTM, Transformer, BERT, DistilGPT2
 
-The analysis and experimental evaluation of **eDySec** were conducted in a controlled hardware and software environment. The reported configuration is provided below for reproducibility and reference, and reflects the setup used for model development, training, and evaluation.
+This yields the full experimental grid executed in Phase (iii), with each configuration producing confusion matrices, ROC curves, learning curves, evaluation summaries, and training logs.
 
-#### Hardware and Operating System
+### 4.2 Evaluation and Statistical Analysis
+
+- **Phase (i)** characterizes the dataset (class distribution, trace sources) and visualizes class separability using **t-SNE** across dynamic, metadata, and static views.
+- **Phase (ii)** produces per-method, per-trace feature subsets, consolidated in per-trace result workbooks.
+- **Phase (iii)** trains and evaluates each DL architecture on each selected feature subset.
+- **Phase (iv)** performs comparative **stability analysis** (mean–std–rank summaries, performance heatmaps, category-wise comparisons, **Friedman and Nemenyi critical difference diagrams**, and p-value matrices) and **explainability analysis** of the best configuration using **SHAP** (global importance, summary, and waterfall plots) and **LIME** (dashboards and instance-level local explanations).
+
+---
+
+## 5. Experimental Environment
+
+For GitHub Codespaces (Dev environment), the default configuration is sufficient to reproduce outputs, though performance may vary or degrade relative to the local setup below due to limited hardware resources. The following controlled environment was used for full-scale model development, training, and evaluation, and is reported for reproducibility.
+
+### 5.1 Hardware and Operating System
+
 - **Processor:** 13th Gen Intel Core i9-13900K
 - **Memory:** 128 GB RAM
 - **GPU:** NVIDIA RTX A6000 with 48 GB memory
 - **Operating System:** Ubuntu 22.04 LTS (64-bit)
 
-#### Python Environment
-- **Python Version:** 3.10.20  
+### 5.2 Python Environment
+
+- **Python Version:** 3.10.20
 - **Compiler:** GCC 14.3.0
 
-#### Core Library Versions
+### 5.3 Core Library Versions
+
 - **NumPy:** 1.23.5
 - **Pandas:** 1.5.3
 - **Matplotlib:** 3.7.1
@@ -94,20 +128,24 @@ The analysis and experimental evaluation of **eDySec** were conducted in a contr
 - **Transformers:** 4.38.2
 - **Joblib:** 1.3.2
 
-#### Deep Learning Backend
+### 5.4 Deep Learning Backend
+
 - **Keras (`tf.keras`):** 2.11.0
 
-#### GPU Configuration
+### 5.5 GPU Configuration
+
 - **TensorFlow Built with CUDA:** Yes
 - **GPU Available:** Yes
 
 ---
 
-## Repository Structure
+## 6. Repository Structure
+
+The repository mirrors the four study phases:
 
 ```json
 {
-  "eDySec": {
+  "empiDySec": {
     "Phase (i) Data Preparation": {
       "QUT-DV25 Dataset": {
         "QUT-DV25_Filetop_Traces": {},
@@ -205,46 +243,41 @@ The analysis and experimental evaluation of **eDySec** were conducted in a contr
     "Related Works": {},
     "Images": {},
     "LICENSE": null,
-    "README.md": null
-    "SECURITY.md": null
-    "edysec_runner.py": null
-    "requirements.txt": null,
+    "README.md": null,
+    "SECURITY.md": null,
+    "empidysec_runner.py": null,
+    "requirements.txt": null
   }
 }
 ```
 
 ---
 
-## How to Run the Project in GitHub Dev Env
+## 7. Reproducing the Study in GitHub Dev Env
 
-This repository includes `edysec_runner.py`, a Python utility to help you **check the project structure**, **set up the environment**, and **run all Jupyter notebooks (`.ipynb`)** across folders and subfolders in the correct order.
+This repository includes `empidysec_runner.py`, a Python utility to **check the project structure**, **set up the environment**, and **run all Jupyter notebooks (`.ipynb`)** across folders and subfolders in the correct study order.
 
-To run this project in **GitHub Codespaces / GitHub Dev**, open the repository in GitHub Dev by replacing `.com` with `.dev` in the URL: https://github.dev/****/eDySec/
+To run this project in **GitHub Codespaces / GitHub Dev**, open the repository in GitHub Dev by replacing `.com` with `.dev` in the URL: https://github.dev/****/empiDySec/
 
-Once the environment is opened, launch the terminal and run the required setup and execution commands provided in the project.
+Once the environment is opened, launch the terminal and run the required setup and execution commands provided below.
 
-###  Important Note
+### Important Note
+
 Before executing the pipeline, please ensure that all **dataset paths and locations** are correctly configured according to your environment. Incorrect dataset paths may result in runtime errors or missing data issues.
 
----
-
-### What the Runner Does
-
-The script supports the following tasks:
+### 7.1 What the Runner Does
 
 - validates the repository structure
 - checks that key folders and files exist
 - installs dependencies from `requirements.txt`
 - discovers notebooks recursively inside subfolders
-- runs notebooks in the expected workflow order
+- runs notebooks in the expected study workflow order
 - executes each notebook from its own directory so relative paths continue to work
 - optionally saves executed notebooks to a separate output directory
 - writes an execution summary report
 - can continue even if some notebooks fail
 
----
-
-### Main Commands (Ubuntu)
+### 7.2 Main Commands (Ubuntu)
 
 #### 1. Install system dependencies
 
@@ -261,6 +294,7 @@ libffi-dev liblzma-dev
 ```bash
 curl https://pyenv.run | bash
 ```
+
 Add pyenv to your shell:
 
 ```bash
@@ -268,6 +302,7 @@ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
 ```
+
 Apply changes:
 
 ```bash
@@ -283,7 +318,7 @@ pyenv install 3.10.20
 #### 4. Set project Python version
 
 ```bash
-cd /workspaces/eDySec
+cd /workspaces/empiDySec
 pyenv local 3.10.20
 python --version   # should show Python 3.10.20
 ```
@@ -291,13 +326,15 @@ python --version   # should show Python 3.10.20
 #### 5. Create virtual environment
 
 ```bash
-python -m venv eDySec
+python -m venv empiDySec
 ```
+
 Activate it:
 
 ```bash
-source /workspaces/eDySec/eDySec/bin/activate
+source /workspaces/empiDySec/empiDySec/bin/activate
 ```
+
 Verify:
 
 ```bash
@@ -316,7 +353,7 @@ python -m pip install nbformat nbclient jupyter ipykernel
 Use this first to verify that the expected folders and files are present.
 
 ```bash
-python edysec_runner.py check
+python empidysec_runner.py check
 ```
 
 #### 8. Set up the environment
@@ -324,7 +361,7 @@ python edysec_runner.py check
 This installs the required Python packages from `requirements.txt`.
 
 ```bash
-python edysec_runner.py setup
+python empidysec_runner.py setup
 ```
 
 #### 9. Only list what will run
@@ -332,62 +369,56 @@ python edysec_runner.py setup
 This performs a dry run without executing notebooks.
 
 ```bash
-python edysec_runner.py run --dry-run
+python empidysec_runner.py run --dry-run
 ```
 
-#### 10. Run only specific script within Phase 2
+#### 10. Run only a specific script within Phase 2
 
 ```bash
-python edysec_runner.py run --phase 2 --method PSO --trace SysCall
+python empidysec_runner.py run --phase 2 --method PSO --trace SysCall
 ```
 
-#### 11. Run the full workflow (will run 387 notebooks)
+#### 11. Run the full study workflow (387 notebooks)
 
-Run only Phase 2
+Run only Phase 2:
 
 ```bash
-python edysec_runner.py run --phase 2
+python empidysec_runner.py run --phase 2
 ```
 
-This runs all notebooks across all phases.
+Run all notebooks across all phases:
 
 ```bash
-python edysec_runner.py run --phase all --continue-on-error
+python empidysec_runner.py run --phase all --continue-on-error
 ```
 
----
+### 7.3 Useful Examples
 
-### Useful Examples
-
-#### Run only FLAML notebooks
+Run only FLAML notebooks:
 
 ```bash
-python edysec_runner.py run --phase all --method FLAML
+python empidysec_runner.py run --phase all --method FLAML
 ```
 
-#### Run only FLAML Pattern notebooks
+Run only FLAML Pattern notebooks:
 
 ```bash
-python edysec_runner.py run --phase 3 --method FLAML --trace Pattern
+python empidysec_runner.py run --phase 3 --method FLAML --trace Pattern
 ```
 
-#### Run only FLAML SysCall CNN notebooks
+Run only the FLAML SysCall CNN notebook:
 
 ```bash
-python edysec_runner.py run --phase 3 --method FLAML --trace SysCall "SysCall_FLAML_CNN.ipynb"
+python empidysec_runner.py run --phase 3 --method FLAML --trace SysCall "SysCall_FLAML_CNN.ipynb"
 ```
 
-#### Overwrite the original notebooks
-
-By default, executed notebooks are saved separately. If you want to overwrite the original notebooks instead, use:
+Overwrite the original notebooks (by default, executed notebooks are saved separately):
 
 ```bash
-python edysec_runner.py run --in-place --continue-on-error
+python empidysec_runner.py run --in-place --continue-on-error
 ```
 
----
-
-### Default Outputs
+### 7.4 Default Outputs
 
 By default, the script saves executed notebooks into:
 
@@ -401,57 +432,43 @@ It also writes an execution summary file:
 execution_summary.json
 ```
 
----
+### 7.5 Recommended Execution Order
 
-### Recommended Execution Order
-
-For a complete end-to-end workflow, run the commands in this order:
+For a complete end-to-end reproduction of the study, run the commands in this order:
 
 ```bash
-python edysec_runner.py check
-python edysec_runner.py setup
-python edysec_runner.py run --phase all --continue-on-error
+python empidysec_runner.py check
+python empidysec_runner.py setup
+python empidysec_runner.py run --phase all --continue-on-error
 ```
 
----
+### 7.6 Phase-Based Execution
 
-### Phase-Based Execution
-
-If your project follows a multi-phase workflow, you can run specific phases only.
-
-Example:
+Since the study follows a multi-phase design, individual phases can be reproduced independently:
 
 ```bash
-python edysec_runner.py run --phase 1
-python edysec_runner.py run --phase 2
-python edysec_runner.py run --phase 3
-python edysec_runner.py run --phase 4
+python empidysec_runner.py run --phase 1
+python empidysec_runner.py run --phase 2
+python empidysec_runner.py run --phase 3
+python empidysec_runner.py run --phase 4
 ```
 
-You can also combine phase selection with method and trace filtering.
-
-Example:
+Phase selection can also be combined with method and trace filtering:
 
 ```bash
-python edysec_runner.py run --phase 3 --method FLAML --trace Pattern
+python empidysec_runner.py run --phase 3 --method FLAML --trace Pattern
 ```
 
----
-
-### Notes
+### 7.7 Notes
 
 - The script executes each notebook from its **own folder**.
 - This is important for notebooks that use **relative paths**.
 - The script is suitable for projects with **folders and subfolders**.
 - It is especially useful when notebooks depend on a fixed repository layout.
 
----
+### 7.8 Expected Dataset Location
 
-### Expected Dataset Location
-
-If your notebooks rely on the dataset being stored in a specific location, keep the dataset in the original repository structure.
-
-For example, in the eDySec layout the dataset is expected under:
+The notebooks rely on the dataset being stored in its original repository location:
 
 ```text
 Phase (i) Data Preparation/QUT-DV25 Dataset/
@@ -459,107 +476,85 @@ Phase (i) Data Preparation/QUT-DV25 Dataset/
 
 Do not move dataset files unless you also update the notebook paths.
 
----
+### 7.9 Troubleshooting
 
-### Troubleshooting
+1. **`requirements.txt` not found** — make sure you are running the script from the repository root.
+2. **Notebook path errors** — this usually happens when dataset folders or relative paths are missing or changed.
+3. **Some notebooks fail but others should continue** — use `python empidysec_runner.py run --phase all --continue-on-error`.
+4. **You only want to preview the execution plan** — use `python empidysec_runner.py run --dry-run`.
 
-#### 1. `requirements.txt` not found
-Make sure you are running the script from the repository root.
-
-#### 2. Notebook path errors
-This usually happens when dataset folders or relative paths are missing or changed.
-
-#### 3. Some notebooks fail but others should continue
-Use:
-
-```bash
-python edysec_runner.py run --phase all --continue-on-error
-```
-
-#### 4. You only want to preview the execution plan
-Use:
-
-```bash
-python edysec_runner.py run --dry-run
-```
-
----
-
-### Example Workflow
+### 7.10 Example Workflow
 
 ```bash
 # Step 1: validate repository structure
-python edysec_runner.py check
+python empidysec_runner.py check
 
 # Step 2: install dependencies
-python edysec_runner.py setup
+python empidysec_runner.py setup
 
 # Step 3: preview the notebooks that will run
-python edysec_runner.py run --dry-run
+python empidysec_runner.py run --dry-run
 
 # Step 4: execute everything
-python edysec_runner.py run --phase all --continue-on-error
+python empidysec_runner.py run --phase all --continue-on-error
 ```
 
----
-
-### Output Summary
+### 7.11 Output Summary
 
 After execution, check:
 
 - `executed_notebooks/` for executed notebook copies
 - `execution_summary.json` for run status and summary information
 
-
 ---
 
-  
-## How to Run the Project (Local PC)
+## 8. Reproducing the Study on a Local PC
 
-### Option 1: pip
+### 8.1 Option 1: pip
 
 ```bash
-git clone https://github.com/****/eDySec.git
-cd eDySec
+git clone https://github.com/****/empiDySec.git
+cd empiDySec
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Option 2: conda
+### 8.2 Option 2: conda
 
 ```bash
-conda create -n edysec python=3.10 -y
-conda activate edysec
+conda create -n empidysec python=3.10 -y
+conda activate empidysec
 pip install -r requirements.txt
 ```
 
-### 3. Required Python Packages
+### 8.3 Required Python Packages
 
-Typical packages used throughout the project include:
+Typical packages used throughout the study include:
 
 ```bash
-`pandas==1.5.3`,  
-`scikit-learn==1.2.2`,  
-`openpyxl`,  
-`numpy==1.23.5`,  
-`scipy==1.9.3`,  
-`tensorflow==2.11.0`,  
-`matplotlib==3.7.1`,  
-`seaborn==0.12.2`,  
-`joblib==1.3.2`,  
-`shap==0.41.0`,  
-`lime`,  
-`flaml[automl]==2.5.0`,  
-`notebook==6.5.6`,  
-`pywinpty==2.0.10`  (Only for windows)  `threadpoolctl==3.1.0` (for Ubuntu)   
-`terminado==0.17.1`,  
+`pandas==1.5.3`,
+`scikit-learn==1.2.2`,
+`openpyxl`,
+`numpy==1.23.5`,
+`scipy==1.9.3`,
+`tensorflow==2.11.0`,
+`matplotlib==3.7.1`,
+`seaborn==0.12.2`,
+`joblib==1.3.2`,
+`shap==0.41.0`,
+`lime`,
+`flaml[automl]==2.5.0`,
+`notebook==6.5.6`,
+`pywinpty==2.0.10`  (Only for Windows)  `threadpoolctl==3.1.0` (for Ubuntu)
+`terminado==0.17.1`,
 `transformers==4.49.0`,
 `scikit-posthocs==0.12.0`.
 ```
+
 These versions were used to ensure **consistent and reproducible experimental results**.
 
-### 4. Jupyter Notebook
+### 8.4 Jupyter Notebook
 
 To launch Jupyter Notebook:
 
@@ -568,9 +563,9 @@ pip install notebook
 jupyter notebook
 ```
 
-### 5. Dataset Availability
+### 8.5 Dataset Availability
 
-The project expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
+The study expects the **QUT-DV25 dataset** and its trace-category folders to be present under:
 
 ```bash
 Phase (i) Data Preparation/QUT-DV25 Dataset/
@@ -578,31 +573,32 @@ Phase (i) Data Preparation/QUT-DV25 Dataset/
 
 Make sure the dataset files remain in their original repository structure before running the notebooks.
 
+---
 
-### 6. Phase-based Instructions
+## 9. Phase-by-Phase Reproduction Protocol
 
-The repository follows a four-phase execution workflow. For reproducibility and consistency, run the notebooks in the order below.
+The repository follows a four-phase execution workflow. For reproducibility and consistency with the reported results, run the notebooks in the order below.
 
-#### Phase 1: Data Preparation
+### Phase 1: Data Preparation (RQ1)
 
-This phase introduces the dataset structure and provides visualization of the underlying data distributions.
+This phase characterizes the dataset structure and visualizes the underlying data distributions.
 
 Run the following notebooks:
 
 ```bash
-Phase (i) Data Preparation/Dataset Overview.ipynb    
+Phase (i) Data Preparation/Dataset Overview.ipynb
 Phase (i) Data Preparation/t-SNE Implementation.ipynb
 ```
 
 This phase produces:
 
-* dataset overview outputs
-* trace source visualizations
-* t-SNE visualizations for dynamic, metadata, and static perspectives
+- dataset overview outputs
+- trace source visualizations
+- t-SNE visualizations for dynamic, metadata, and static perspectives
 
-#### Phase 2: Feature Selection
+### Phase 2: Feature Selection (RQ2)
 
-This phase applies the feature selection methods used in the study.
+This phase applies the five feature selection methods compared in the study.
 
 Go to:
 
@@ -610,17 +606,15 @@ Go to:
 Phase (ii) Feature Selection/Feature Selection Methods/
 ```
 
-The available methods are:
+The evaluated methods are:
 
-* **ANOVA**
-* **CORR**
-* **FLAML**
-* **PSO**
-* **WOA**
+- **ANOVA**
+- **CORR**
+- **FLAML**
+- **PSO**
+- **WOA**
 
-For each method, run the notebook corresponding to the required trace category.
-
-Example:
+For each method, run the notebook corresponding to the required trace category. Example (ANOVA):
 
 ```bash
 Phase (ii) Feature Selection/Feature Selection Methods/ANOVA/Feature_Selection_Combined_ANOVA.ipynb
@@ -640,9 +634,9 @@ The generated and consolidated feature selection outputs are available under:
 Phase (ii) Feature Selection/Feature Selection Result/
 ```
 
-#### Phase 3: Model Selection and Evaluation
+### Phase 3: Model Selection and Evaluation (RQ3)
 
-This phase trains and evaluates the deep learning models using the selected feature subsets.
+This phase trains and evaluates the deep learning models on the selected feature subsets.
 
 Go to:
 
@@ -667,9 +661,7 @@ PSO/
 WOA/
 ```
 
-Then open the required trace-category folder and run the corresponding notebook.
-
-For example, under `FLAML/Pattern/`:
+Then open the required trace-category folder and run the corresponding notebook. For example, under `FLAML/Pattern/`:
 
 ```bash
 Phase (iii) DL Model Selection & Evaluation/FLAML/Pattern/Pattern_FLAML_BERT.ipynb
@@ -696,11 +688,11 @@ training logs
 
 The same procedure should be followed for the other feature-selection methods (`ANOVA`, `CORR`, `PSO`, and `WOA`) by navigating to the corresponding method directory, opening the desired trace-category folder, and running the appropriate notebook following the same naming convention.
 
-#### Phase 4: Stability and Explainability Analysis
+### Phase 4: Stability and Explainability Analysis (RQ4–RQ5)
 
 This phase performs comparative stability analysis across models and feature-selection methods, and provides explainability analysis for the best-performing configuration.
 
-For **stability analysis**, run:
+For **stability analysis** (RQ4), run:
 
 ```bash
 Phase (iv) Stability & Explainability/Stability Analysis/Stability Analysis.ipynb
@@ -721,7 +713,7 @@ Typical outputs include:
 - p-value comparison matrices
 - compact summaries of best-performing models
 
-For **explainability analysis**, run:
+For **explainability analysis** (RQ5), run:
 
 ```bash
 Phase (iv) Stability & Explainability/Explainability Analysis/FLAML DL MLP Combined XAI.ipynb
@@ -745,88 +737,92 @@ Typical outputs include:
 
 ---
 
-### Recommended End-to-End Execution Order
+## 10. Recommended End-to-End Execution Order
 
-For a full reproduction of the project workflow, run the repository in the following order:
+For a full reproduction of the study, run the repository in the following order:
 
 1. `Dataset Overview.ipynb`
 2. `t-SNE Implementation.ipynb`
-3. feature selection notebooks for the chosen method(s)
-4. deep learning evaluation notebooks for the selected features
+3. Feature selection notebooks for the chosen method(s)
+4. Deep learning evaluation notebooks for the selected features
 5. `FLAML DL MLP Combined XAI.ipynb`
 6. `Stability Analysis.ipynb`
 
 ---
 
-### Core Outputs
+## 11. Study Artifacts and Outputs
 
-The repository generates the following outputs:
+Reproducing the study generates the following artifacts:
 
-* dataset overview figures
-* trace source figures
-* t-SNE visualizations
-* selected feature summaries
-* confusion matrices
-* ROC curves
-* learning curves
-* evaluation summary files
-* training logs
-* SHAP explanations
-* LIME dashboards and local explanations
-* stability analysis figures and statistical reports
-
----
-
-### Best Reported Configuration
-
-The strongest reported configuration in this repository is:
-
-* **Combined traces**
-* **FLAML feature selection**
-* **MLP model**
-
-This configuration is also used in the explainability phase.
+- dataset overview figures
+- trace source figures
+- t-SNE visualizations
+- selected feature summaries
+- confusion matrices
+- ROC curves
+- learning curves
+- evaluation summary files
+- training logs
+- SHAP explanations
+- LIME dashboards and local explanations
+- stability analysis figures and statistical reports
 
 ---
 
-## Reproducibility Note
+## 12. Key Finding: Best Reported Configuration
 
-Due to differences in hardware (e.g., GPU model, CUDA version, CPU architecture, libraries), the script outputs may vary slightly across systems.  
+The strongest configuration observed in the empirical study is:
 
-Observed variation is typically small (within **0 ~ 1.25** difference at most) and does not affect overall conclusions.
+- **Combined traces**
+- **FLAML feature selection**
+- **MLP model**
+
+This configuration is also the subject of the explainability phase (RQ5).
+
+---
+
+## 13. Threats to Validity and Reproducibility Notes
+
+Due to differences in hardware (e.g., GPU model, CUDA version, CPU architecture, libraries), the script outputs may vary slightly across systems.
+
+Observed variation is typically small (within **0 ~ 1.25** difference at most) and does not affect the overall conclusions of the study.
 
 These differences are expected due to:
-- Floating‑point precision variations  
-- Non‑deterministic GPU operations  
-- Backend/library implementation differences  
+
+- Floating-point precision variations
+- Non-deterministic GPU operations
+- Backend/library implementation differences
 
 For best reproducibility, please ensure matching:
-- Python version  
-- CUDA/cuDNN versions  
-- Library dependencies (see `requirements.txt`)  
+
+- Python version
+- CUDA/cuDNN versions
+- Library dependencies (see `requirements.txt`)
 
 ---
 
-## Note on Model Naming Consistency
+## 14. Note on Model Naming Consistency
 
-In this repository and the accompanying paper, the correct model name is MDCNN (Multi-Dimensional Convolutional Neural Network).
-Due to a typographical inconsistency, the name MCDCNN may appear in parts of the analysis code and intermediate results.
+In this repository and the accompanying paper, the correct model name is **MDCNN** (Multi-Dimensional Convolutional Neural Network). Due to a typographical inconsistency, the name **MCDCNN** may appear in parts of the analysis code and intermediate results.
 
-Please note that MCDCNN is a typo and refers to the same MDCNN model used throughout the paper. All results labeled as MCDCNN should be interpreted as MDCNN.
+Please note that MCDCNN is a typo and refers to the same MDCNN model used throughout the study. All results labeled as MCDCNN should be interpreted as MDCNN.
 
 ---
 
-## Citation
+## 15. Citation
+
+If you use this replication package, dataset, or results in your research, please cite:
 
 ```bibtex
-@article{edysec,
-  title   = {eDySec: A Deep Learning-based Explainable Dynamic Analysis Framework for Detecting Malicious Packages in the PyPI Ecosystem},
+@article{empidysec,
+  title   = {An Empirical Study of Deep Learning for Dynamic Behavioral Detection of Malicious Software Packages in the PyPI Ecosystem},
   author  = {Will be added},
   year    = {will be added}
 }
 ```
+
 ---
 
-## License
+## 16. License
 
 This project is distributed under the terms specified in the `LICENSE` file.
